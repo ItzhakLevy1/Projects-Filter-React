@@ -1,38 +1,48 @@
+// Import necessary libraries and components
 import React, { useEffect, useState } from "react";
-import { items } from "./Items";
-import "./style.css";
+import { items } from "./Items"; // Import a list of items to be filtered
+import "./style.css"; // Import custom styles
 
+// Main functional component for filtering projects
 export default function MultiFilters() {
+  // State for managing filter values
   const [filters, setFilters] = useState({
-    name: "",
-    youtubeChannel: "",
-    minHours: 0,
-    maxHours: "",
-    techStack: "",
-    difficulty: "",
+    name: "", // Selected project name
+    youtubeChannel: "", // Selected YouTube channel
+    minHours: 0, // Minimum hours for project duration
+    maxHours: "", // Maximum hours for project duration
+    techStack: "", // Keywords for filtering by tech stack
+    difficulty: "", // Selected difficulty level
   });
 
+  // State for storing the filtered items to display
   const [filteredItems, setFilteredItems] = useState(items);
 
+  // Predefined arrays for difficulty levels and hour range options
   const difficulties = ["Beginner", "Intermediate", "Advanced"];
   const maxHourOptions = ["0-5 hours", "5-10 hours", "Above 10 hours"];
 
+  // Extract unique project names and YouTube channels from the items list
   const uniqueProjectNames = [...new Set(items.map((item) => item.name))];
   const uniqueYouTubeChannels = [
     ...new Set(items.map((item) => item.youtubeChannel)),
   ];
 
+  // Automatically filter items whenever the filters state changes
   useEffect(() => {
     filterItems();
   }, [filters]);
 
+  // Function to filter items based on selected filters
   const filterItems = () => {
     let filtered = items.filter((item) => {
+      // Split the tech stack input into keywords for filtering
       const techKeywords = filters.techStack
         .toLowerCase()
         .split(" ")
-        .filter((word) => word.trim() !== ""); // Split keywords by spaces
+        .filter((word) => word.trim() !== "");
 
+      // Determine if the project falls within the selected hour range
       const isWithinMaxHours =
         filters.maxHours === "" ||
         (filters.maxHours === "0-5 hours" && item.lengthInHours <= 5) ||
@@ -41,6 +51,7 @@ export default function MultiFilters() {
           item.lengthInHours <= 10) ||
         (filters.maxHours === "Above 10 hours" && item.lengthInHours > 10);
 
+      // Apply all filter conditions
       return (
         (filters.name === "" || item.name === filters.name) &&
         (filters.youtubeChannel === "" ||
@@ -55,11 +66,18 @@ export default function MultiFilters() {
       );
     });
 
+    // Update the filtered items state
     setFilteredItems(filtered);
   };
 
+  // Function to update a specific filter value
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  // Function to clear the tech stack filter
+  const clearTechStackFilter = () => {
+    handleFilterChange("techStack", "");
   };
 
   return (
@@ -68,6 +86,7 @@ export default function MultiFilters() {
         <h1>Projects Filter</h1>
 
         <div className="filters-container">
+          {/* Filter by Project Name */}
           <div className="filter">
             <label>Filter by Project Name</label>
             <select
@@ -75,14 +94,15 @@ export default function MultiFilters() {
               onChange={(e) => handleFilterChange("name", e.target.value)}
             >
               <option value="">Select Project</option>
-              {uniqueProjectNames.map((name, idx) => (
-                <option key={idx} value={name}>
+              {uniqueProjectNames.map((name, index) => (
+                <option key={index} value={name}>
                   {name}
                 </option>
               ))}
             </select>
           </div>
 
+          {/* Filter by YouTube Channel */}
           <div className="filter">
             <label>Filter by YouTube Channel</label>
             <select
@@ -92,14 +112,15 @@ export default function MultiFilters() {
               }
             >
               <option value="">Select Channel</option>
-              {uniqueYouTubeChannels.map((channel, idx) => (
-                <option key={idx} value={channel}>
+              {uniqueYouTubeChannels.map((channel, index) => (
+                <option key={index} value={channel}>
                   {channel}
                 </option>
               ))}
             </select>
           </div>
 
+          {/* Filter by Max Hours */}
           <div className="filter">
             <label>Filter by Max Hours</label>
             <select
@@ -107,24 +128,35 @@ export default function MultiFilters() {
               onChange={(e) => handleFilterChange("maxHours", e.target.value)}
             >
               <option value="">Select Range</option>
-              {maxHourOptions.map((option, idx) => (
-                <option key={idx} value={option}>
+              {maxHourOptions.map((option, index) => (
+                <option key={index} value={option}>
                   {option}
                 </option>
               ))}
             </select>
           </div>
 
+          {/* Filter by Tech Stack */}
           <div className="filter">
             <label>Filter by Tech Stack</label>
-            <input
-              type="text"
-              placeholder="Enter keywords (e.g., React Node)"
-              value={filters.techStack}
-              onChange={(e) => handleFilterChange("techStack", e.target.value)}
-            />
+            <div style={{ position: "relative" }}>
+              <input
+                type="text"
+                placeholder="Enter keywords (e.g., React Node)"
+                value={filters.techStack}
+                onChange={(e) =>
+                  handleFilterChange("techStack", e.target.value)
+                }
+              />
+              {filters.techStack && (
+                <button className="clear-button" onClick={clearTechStackFilter}>
+                  &times;
+                </button>
+              )}
+            </div>
           </div>
 
+          {/* Filter by Difficulty */}
           <div className="filter">
             <label>Filter by Difficulty</label>
             <select
@@ -132,8 +164,8 @@ export default function MultiFilters() {
               onChange={(e) => handleFilterChange("difficulty", e.target.value)}
             >
               <option value="">Select Difficulty</option>
-              {difficulties.map((level, idx) => (
-                <option key={idx} value={level}>
+              {difficulties.map((level, index) => (
+                <option key={index} value={level}>
                   {level}
                 </option>
               ))}
@@ -142,10 +174,11 @@ export default function MultiFilters() {
         </div>
       </div>
 
+      {/* Section to display filtered items */}
       <div className="items-container">
         {filteredItems.length > 0 ? (
-          filteredItems.map((item, idx) => (
-            <div key={`items-${idx}`} className="item">
+          filteredItems.map((item, index) => (
+            <div key={`items-${index}`} className="item">
               <p>
                 <strong>Project:</strong> {item.name}
               </p>
