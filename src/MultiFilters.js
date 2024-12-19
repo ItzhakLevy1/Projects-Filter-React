@@ -28,6 +28,13 @@ export default function MultiFilters() {
     ...new Set(items.map((item) => item.youtubeChannel)),
   ];
 
+  // Extract unique tech stack keywords from the items list
+  const uniqueTechStack = [
+    ...new Set(
+      items.flatMap((item) => item.techStack.map((tech) => tech.toLowerCase()))
+    ),
+  ].sort();
+
   // Automatically filter items whenever the filters state changes
   useEffect(() => {
     filterItems();
@@ -142,12 +149,18 @@ export default function MultiFilters() {
             <div style={{ position: "relative" }}>
               <input
                 type="text"
+                list="techStackSuggestions"
                 placeholder="Enter keywords (e.g., React Node)"
                 value={filters.techStack}
                 onChange={(e) =>
                   handleFilterChange("techStack", e.target.value)
                 }
               />
+              <datalist id="techStackSuggestions">
+                {uniqueTechStack.map((tech, index) => (
+                  <option key={index} value={tech} />
+                ))}
+              </datalist>
               {filters.techStack && (
                 <button className="clear-button" onClick={clearTechStackFilter}>
                   &times;
