@@ -128,11 +128,11 @@ p {
 }
 
 .item {
-  background-color: var(--item-background-color);
+  /* background-color: var(--item-background-color); */
   color: var(--item-text-color);
   padding: 16px;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
   flex: 0 1 calc(50% - 40px);
   max-width: 250px;
