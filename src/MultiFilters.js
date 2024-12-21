@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { items as initialItems } from "./Items"; // Import a list of items to be filtered
-import ThemeToggleButton from "./components/ThemeToggleButton";
-import "./components/ThemeToggleButton.css";
+import ThemeToggleButton from "./components/ThemeToggleButton/ThemeToggleButton.js";
+import "./components/ThemeToggleButton/ThemeToggleButton.css";
 import "./style.css"; // Import custom styles
 
 export default function MultiFilters() {
@@ -16,29 +16,67 @@ export default function MultiFilters() {
 
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [filteredItems, setFilteredItems] = useState(initialItems);
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(true);
 
   useEffect(() => {
     filterItems();
   }, [filters]);
 
+  useEffect(() => {
+    if (isDarkTheme) {
+      document.body.classList.add("dark-theme");
+    } else {
+      document.body.classList.remove("dark-theme");
+    }
+  }, [isDarkTheme]); // Run this effect whenever `isDarkTheme` changes
+
   // Fetch video details using the YouTube Data API
   const fetchVideoDetails = async (url) => {
-    const videoId = new URL(url).searchParams.get("v");
-    const apiKey = process.env.REACT_APP_YOUTUBE_API_KEY;
-    const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,contentDetails&key=${apiKey}`;
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    const video = data.items[0];
+    try {
+      const videoId = new URL(url).searchParams.get("v");
+      if (!videoId) {
+        console.error("Invalid YouTube URL. Could not extract video ID.");
+        return;
+      }
 
-    return {
-      videoName: video.snippet.title,
-      youtubeChannel: video.snippet.channelTitle,
-      videoDurationInHours: parseISO8601Duration(video.contentDetails.duration),
-      techStack: [],
-      difficulty: "Intermediate",
-      link: url,
-    };
+      const apiKey = process.env.REACT_APP_YOUTUBE_API_KEY;
+      const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,contentDetails&key=${apiKey}`;
+
+      console.log("Fetching video details from API...");
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error(`Error fetching video details: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log("API response:", data);
+      console.log("API response - Duration :", data.items[0].contentDetails.duration);
+      console.log("API response - channelTitle :", data.items[0].snippet.channelTitle);
+      console.log("API response - Title :", data.items[0].snippet.title);
+      console.log("API response - Title :", data.items[0].snippet.title);
+      console.log("API response - Title :", data.items[0].snippet.title);
+
+      if (data.items.length === 0) {
+        console.log("No video found with the provided video ID.");
+        return;
+      }
+
+      const video = data.items[0];
+
+      return {
+        videoName: video.snippet.title,
+        youtubeChannel: video.snippet.channelTitle,
+        videoDurationInHours: parseISO8601Duration(
+          video.contentDetails.duration
+        ),
+        techStack: [], // You can populate this if needed
+        difficulty: "Intermediate", // You can adjust this as needed
+        link: url,
+      };
+    } catch (error) {
+      console.error("Error in fetchVideoDetails:", error);
+    }
   };
 
   const parseISO8601Duration = (duration) => {
