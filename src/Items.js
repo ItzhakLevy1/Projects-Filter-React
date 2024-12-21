@@ -1,6 +1,6 @@
 export const items = [
   {
-    name: "GraphQL Crash Course in 2024 | Build a Full Stack MERN App",
+    videoName: "GraphQL Crash Course in 2024 | Build a Full Stack MERN App",
     category: "Web Development",
     youtubeChannel: "As a Programmer",
     lengthInHours: 4.5,
@@ -16,7 +16,7 @@ export const items = [
     link: "https://www.youtube.com/watch?v=Vr-QHtbmd38",
   },
   {
-    name: "How To Build a Netflix Clone with MERN Stack in 2024 - Full Course",
+    videoName: "How To Build a Netflix Clone with MERN Stack in 2024 - Full Course",
     category: "Web Development",
     youtubeChannel: "As a Programmer",
     lengthInHours: 7,
@@ -25,7 +25,7 @@ export const items = [
     link: "https://www.youtube.com/watch?v=gRroBZczKAU",
   },
   {
-    name: "Portfolio Website",
+    videoName: "Portfolio Website",
     category: "Web Development",
     youtubeChannel: "CodeWithHarry",
     lengthInHours: 3,
@@ -33,7 +33,7 @@ export const items = [
     difficulty: "Beginner",
   },
   {
-    name: "Fitness Tracker",
+    videoName: "Fitness Tracker",
     category: "Mobile Development",
     youtubeChannel: "The Net Ninja",
     lengthInHours: 6,
@@ -41,7 +41,7 @@ export const items = [
     difficulty: "Advanced",
   },
   {
-    name: "Task Manager",
+    videoName: "Task Manager",
     category: "Web Development",
     youtubeChannel: "FreeCodeCamp",
     lengthInHours: 4,
@@ -49,7 +49,7 @@ export const items = [
     difficulty: "Intermediate",
   },
   {
-    name: "Stock Market Dashboard",
+    videoName: "Stock Market Dashboard",
     category: "Data Analysis",
     youtubeChannel: "Tech With Tim",
     lengthInHours: 7,
@@ -57,7 +57,7 @@ export const items = [
     difficulty: "Advanced",
   },
   {
-    name: "Stock Market Dashboard",
+    videoName: "Stock Market Dashboard",
     category: "Data Analysis",
     youtubeChannel: "Tech With Tim",
     lengthInHours: 7,
@@ -65,7 +65,7 @@ export const items = [
     difficulty: "Advanced",
   },
   {
-    name: "Stock Market Dashboard",
+    videoName: "Stock Market Dashboard",
     category: "Data Analysis",
     youtubeChannel: "Tech With Tim",
     lengthInHours: 7,
@@ -73,7 +73,7 @@ export const items = [
     difficulty: "Advanced",
   },
   {
-    name: "Stock Market Dashboard",
+    videoName: "Stock Market Dashboard",
     category: "Data Analysis",
     youtubeChannel: "Tech With Tim",
     lengthInHours: 7,
@@ -81,7 +81,7 @@ export const items = [
     difficulty: "Advanced",
   },
   {
-    name: "Stock Market Dashboard",
+    videoName: "Stock Market Dashboard",
     category: "Data Analysis",
     youtubeChannel: "Tech With Tim",
     lengthInHours: 7,
@@ -89,7 +89,7 @@ export const items = [
     difficulty: "Advanced",
   },
   {
-    name: "Stock Market Dashboard",
+    videoName: "Stock Market Dashboard",
     category: "Data Analysis",
     youtubeChannel: "Tech With Tim",
     lengthInHours: 7,
@@ -97,7 +97,7 @@ export const items = [
     difficulty: "Advanced",
   },
   {
-    name: "Stock Market Dashboard",
+    videoName: "Stock Market Dashboard",
     category: "Data Analysis",
     youtubeChannel: "Tech With Tim",
     lengthInHours: 7,
@@ -105,7 +105,7 @@ export const items = [
     difficulty: "Advanced",
   },
   {
-    name: "Stock Market Dashboard",
+    videoName: "Stock Market Dashboard",
     category: "Data Analysis",
     youtubeChannel: "Tech With Tim",
     lengthInHours: 7,
@@ -113,7 +113,7 @@ export const items = [
     difficulty: "Advanced",
   },
   {
-    name: "Stock Market Dashboard",
+    videoName: "Stock Market Dashboard",
     category: "Data Analysis",
     youtubeChannel: "Tech With Tim",
     lengthInHours: 7,
@@ -121,7 +121,7 @@ export const items = [
     difficulty: "Advanced",
   },
   {
-    name: "Stock Market Dashboard",
+    videoName: "Stock Market Dashboard",
     category: "Data Analysis",
     youtubeChannel: "Tech With Tim",
     lengthInHours: 7,
@@ -129,7 +129,7 @@ export const items = [
     difficulty: "Advanced",
   },
   {
-    name: "Stock Market Dashboard",
+    videoName: "Stock Market Dashboard",
     category: "Data Analysis",
     youtubeChannel: "Tech With Tim",
     lengthInHours: 7,
