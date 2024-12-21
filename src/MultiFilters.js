@@ -30,6 +30,23 @@ export default function MultiFilters() {
     }
   }, [isDarkTheme]); // Run this effect whenever `isDarkTheme` changes
 
+  // Helper function to parse ISO 8601 duration to hours
+  const parseDuration = (isoDuration) => {
+    const match = isoDuration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+    const hours = parseInt(match[1]?.replace("H", "") || "0", 10);
+    const minutes = parseInt(match[2]?.replace("M", "") || "0", 10);
+    const seconds = parseInt(match[3]?.replace("S", "") || "0", 10);
+
+    const totalHours = hours + minutes / 60 + seconds / 3600;
+    console.log(
+      `Duration parsed: ${hours} hours, ${minutes} minutes, ${seconds} seconds (${totalHours.toFixed(
+        2
+      )} hours)`
+    );
+    console.log("totalHours", totalHours);
+    return totalHours;
+  };
+
   // Fetch video details using the YouTube Data API
   const fetchVideoDetails = async (url) => {
     try {
@@ -51,11 +68,14 @@ export default function MultiFilters() {
 
       const data = await response.json();
       console.log("API response:", data);
-      console.log("API response - Duration :", data.items[0].contentDetails.duration);
-      console.log("API response - channelTitle :", data.items[0].snippet.channelTitle);
-      console.log("API response - Title :", data.items[0].snippet.title);
-      console.log("API response - Title :", data.items[0].snippet.title);
-      console.log("API response - Title :", data.items[0].snippet.title);
+      console.log(
+        "API response - Duration :",
+        data.items[0].contentDetails.duration
+      );
+      console.log(
+        "API response - channelTitle :",
+        data.items[0].snippet.channelTitle
+      );
 
       if (data.items.length === 0) {
         console.log("No video found with the provided video ID.");
@@ -63,12 +83,15 @@ export default function MultiFilters() {
       }
 
       const video = data.items[0];
+      const videoDurationInHours = parseDuration(
+        data.items[0].contentDetails.duration
+      );
 
       return {
         videoName: video.snippet.title,
         youtubeChannel: video.snippet.channelTitle,
         videoDurationInHours: parseISO8601Duration(
-          video.contentDetails.duration
+          data.items[0].contentDetails.duration
         ),
         techStack: [], // You can populate this if needed
         difficulty: "Intermediate", // You can adjust this as needed
@@ -152,12 +175,6 @@ export default function MultiFilters() {
     const newItem = await fetchVideoDetails(youtubeUrl);
     setFilteredItems((prevItems) => [...prevItems, newItem]);
     setYoutubeUrl(""); // Clear input
-  };
-
-  // Toggle between dark and light theme
-  const toggleTheme = () => {
-    setIsDarkTheme((prev) => !prev);
-    document.body.classList.toggle("dark-theme");
   };
 
   return (
