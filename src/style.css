@@ -14,9 +14,9 @@
 }
 
 body.dark-theme {
-  --background-color: #000;
-  --text-color: #ffcc00;
-  --primary-color: #ff00ea;
+  --background-color: #252120;
+  --text-color: #d1fad7;
+  --primary-color: #ff00ea; /* Adjusted to use vibrant color */
   --secondary-color: #00ff33;
   --item-background-color: #1e293b;
   --item-text-color: #fff;
@@ -24,6 +24,12 @@ body.dark-theme {
   --item-hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   --toggle-background: #ffcc00;
   --toggle-text: "Dark";
+  background: linear-gradient(
+    -30deg,
+    #1f1a18 0px,
+    /* Darkened primary background */ #38342c 100%
+      /* Lightened primary background */
+  );
 }
 
 body {
@@ -74,7 +80,7 @@ p {
   gap: 5px;
   width: 200px;
   text-align: center;
-  position: relative; /* Ensure the parent element is positioned relative */
+  position: relative;
 }
 
 .filter label {
@@ -92,7 +98,7 @@ p {
 
 .filter input {
   position: relative;
-  padding-right: 30px; /* Space for the clear button */
+  padding-right: 30px;
 }
 
 .clear-button {
@@ -224,7 +230,7 @@ input:checked + .slider:before {
 /* Media queries for mobile screens */
 @media screen and (max-width: 768px) {
   .container {
-    height: auto; /* Allow container height to adjust dynamically */
+    height: auto;
   }
 
   h1 {
@@ -249,7 +255,7 @@ input:checked + .slider:before {
   }
 
   .item {
-    flex: 0 1 calc(100% - 20px); /* Each item spans full width minus gap */
-    max-width: 100%; /* Remove fixed width for mobile screens */
+    flex: 0 1 calc(100% - 20px);
+    max-width: 100%;
   }
 }

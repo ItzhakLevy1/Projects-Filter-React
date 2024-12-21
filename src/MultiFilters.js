@@ -1,116 +1,77 @@
-// Import necessary libraries and components
 import React, { useEffect, useState } from "react";
-import { items } from "./Items"; // Import a list of items to be filtered
+import { items as initialItems } from "./Items"; // Import a list of items to be filtered
+import ThemeToggleButton from "./components/ThemeToggleButton";
+import "./components/ThemeToggleButton.css";
 import "./style.css"; // Import custom styles
 
-// Main functional component for filtering projects
 export default function MultiFilters() {
-  // State for managing filter values
   const [filters, setFilters] = useState({
-    videoName: "", // Selected project videoName
-    youtubeChannel: "", // Selected YouTube channel
-    minHours: 0, // Minimum hours for project duration
-    maxHours: "", // Maximum hours for project duration
-    techStack: "", // Keywords for filtering by tech stack
-    difficulty: "", // Selected difficulty level
+    videoName: "",
+    youtubeChannel: "",
+    minHours: 0,
+    maxHours: "",
+    techStack: "",
+    difficulty: "",
   });
 
-  const [youtubeUrl, setYoutubeUrl] = useState(""); // State for YouTube URL input
-  const [filteredItems, setFilteredItems] = useState(items); // State for storing the filtered items to display
-  const [isDarkTheme, setIsDarkTheme] = useState(false); // State for theme
+  const [youtubeUrl, setYoutubeUrl] = useState("");
+  const [filteredItems, setFilteredItems] = useState(initialItems);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
 
-  // Log initial state
-  console.log("Initial filters state:", filters);
-  console.log("Initial filteredItems state:", filteredItems);
-
-  // Call filterItems immediately after setting the initial state of filters
-  useEffect(() => {
-    console.log("Calling filterItems on initial render");
-    filterItems();
-  }, []);
-
-  // Function to fetch video details from the YouTube Data API
-  const fetchVideoDetails = async (url) => {
-    const videoId = new URL(url).searchParams.get("v"); // Extract the video ID from the YouTube URL using the "v" query parameter
-
-    const apiKey = process.env.REACT_APP_YOUTUBE_API_KEY; // Load the API key from the environment variables
-
-    // Build the API request URL to fetch video details and content details
-    const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,contentDetails&key=${apiKey}`;
-
-    // Make the API request to fetch video details
-    const response = await fetch(apiUrl);
-
-    // Parse the JSON response
-    const data = await response.json();
-
-    // Debugging: Log the fetched video details and the video title
-    console.log("Fetched video details:", data);
-    console.log("Fetched video details:", data.items[0].snippet.title);
-
-    // Extract the video object from the response data
-    const video = data.items[0];
-
-    // Return an object containing the extracted video details
-    return {
-      videoName: video.snippet.title,
-      youtubeChannel: video.snippet.channelTitle,
-      videoDurationInHours: parseISO8601Duration(video.contentDetails.duration),
-      techStack: [], // Placeholder for tech stack (can be extracted if available)
-      difficulty: "Intermediate", // Default difficulty (adjust as needed)
-      link: url, // Original YouTube URL
-    };
-  };
-
-  // Helper function to convert ISO 8601 duration to hours
-  const parseISO8601Duration = (duration) => {
-    // Match the ISO 8601 duration format (e.g., "PT1H30M45S")
-    const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-
-    // Extract hours, minutes, and seconds, defaulting to 0 if not present
-    const hours = match[1] ? parseInt(match[1].replace("H", "")) : 0;
-    const minutes = match[2] ? parseInt(match[2].replace("M", "")) : 0;
-    const seconds = match[3] ? parseInt(match[3].replace("S", "")) : 0;
-
-    // Convert total time to hours (fractional hours for minutes and seconds)
-    return hours + minutes / 60 + seconds / 3600;
-  };
-
-  // Predefined arrays for difficulty levels and hour range options
-  const difficulties = ["Beginner", "Intermediate", "Advanced"];
-  const maxHourOptions = ["0-5 hours", "5-10 hours", "Above 10 hours"];
-
-  // Extract unique project videoNames and YouTube channels from the items list
-  const uniqueProjectvideoNames = [
-    ...new Set(items.map((item) => item.videoName)),
-  ];
-  const uniqueYouTubeChannels = [
-    ...new Set(items.map((item) => item.youtubeChannel)),
-  ];
-
-  // Extract unique tech stack keywords from the items list
-  const uniqueTechStack = [
-    ...new Set(
-      items.flatMap((item) => item.techStack.map((tech) => tech.toLowerCase()))
-    ),
-  ].sort();
-
-  // Automatically filter items whenever the filters state changes
   useEffect(() => {
     filterItems();
   }, [filters]);
 
-  // Function to filter items based on selected filters
+  // Fetch video details using the YouTube Data API
+  const fetchVideoDetails = async (url) => {
+    const videoId = new URL(url).searchParams.get("v");
+    const apiKey = process.env.REACT_APP_YOUTUBE_API_KEY;
+    const apiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,contentDetails&key=${apiKey}`;
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    const video = data.items[0];
+
+    return {
+      videoName: video.snippet.title,
+      youtubeChannel: video.snippet.channelTitle,
+      videoDurationInHours: parseISO8601Duration(video.contentDetails.duration),
+      techStack: [],
+      difficulty: "Intermediate",
+      link: url,
+    };
+  };
+
+  const parseISO8601Duration = (duration) => {
+    const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+    const hours = match[1] ? parseInt(match[1].replace("H", "")) : 0;
+    const minutes = match[2] ? parseInt(match[2].replace("M", "")) : 0;
+    const seconds = match[3] ? parseInt(match[3].replace("S", "")) : 0;
+    return hours + minutes / 60 + seconds / 3600;
+  };
+
+  const difficulties = ["Beginner", "Intermediate", "Advanced"];
+  const maxHourOptions = ["0-5 hours", "5-10 hours", "Above 10 hours"];
+  const uniqueProjectvideoNames = [
+    ...new Set(initialItems.map((item) => item.videoName)),
+  ];
+  const uniqueYouTubeChannels = [
+    ...new Set(initialItems.map((item) => item.youtubeChannel)),
+  ];
+  const uniqueTechStack = [
+    ...new Set(
+      initialItems.flatMap((item) =>
+        item.techStack.map((tech) => tech.toLowerCase())
+      )
+    ),
+  ].sort();
+
+  // Filtering function based on the filters state
   const filterItems = () => {
-    console.log("Filtering items with filters:", filters);
-    let filtered = items.filter((item) => {
-      // Split the tech stack input into keywords for filtering
+    let filtered = initialItems.filter((item) => {
       const techKeywords = filters.techStack
         .toLowerCase()
         .split(" ")
         .filter((word) => word.trim() !== "");
-
-      // Determine if the project falls within the selected hour range
       const isWithinMaxHours =
         filters.maxHours === "" ||
         (filters.maxHours === "0-5 hours" && item.lengthInHours <= 5) ||
@@ -119,35 +80,6 @@ export default function MultiFilters() {
           item.lengthInHours <= 10) ||
         (filters.maxHours === "Above 10 hours" && item.lengthInHours > 10);
 
-      // Log each condition
-      console.log("Checking item:", item);
-      console.log(
-        "Condition videoName:",
-        filters.videoName === "" || item.videoName === filters.videoName
-      );
-      console.log(
-        "Condition youtubeChannel:",
-        filters.youtubeChannel === "" ||
-          item.youtubeChannel === filters.youtubeChannel
-      );
-      console.log(
-        "Condition minHours:",
-        item.lengthInHours >= filters.minHours
-      );
-      console.log("Condition isWithinMaxHours:", isWithinMaxHours);
-      console.log(
-        "Condition techStack:",
-        techKeywords.length === 0 ||
-          techKeywords.some((keyword) =>
-            item.techStack.some((tech) => tech.toLowerCase().includes(keyword))
-          )
-      );
-      console.log(
-        "Condition difficulty:",
-        filters.difficulty === "" || item.difficulty === filters.difficulty
-      );
-
-      // Apply all filter conditions
       return (
         (filters.videoName === "" || item.videoName === filters.videoName) &&
         (filters.youtubeChannel === "" ||
@@ -162,60 +94,42 @@ export default function MultiFilters() {
       );
     });
 
-    // Update the filtered items state
-    console.log("Filtered items:", filtered);
     setFilteredItems(filtered);
   };
 
-  // Function to update a specific filter value
+  // Update filter values dynamically
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  // Function to clear the tech stack filter
+  // Clear tech stack filter
   const clearTechStackFilter = () => {
     handleFilterChange("techStack", "");
   };
 
-  // Function to handle adding a new project based on YouTube URL
+  // Add a new project from YouTube URL
   const handleAddProject = async () => {
-    // If the input URL is empty, do nothing
     if (!youtubeUrl) return;
 
-    // Fetch the video details using the URL
     const newItem = await fetchVideoDetails(youtubeUrl);
-
-    // Add the fetched video details as a new item to the items array
-    items.push(newItem);
-
-    // Clear the YouTube URL input field
-    setYoutubeUrl("");
+    setFilteredItems((prevItems) => [...prevItems, newItem]);
+    setYoutubeUrl(""); // Clear input
   };
 
-  // Function to toggle the theme
-const toggleTheme = () => {
-  // Update the `isDarkTheme` state by toggling its current value
-  setIsDarkTheme((prevTheme) => !prevTheme); 
-  // If `isDarkTheme` is true, set it to false (light theme)
-  // If `isDarkTheme` is false, set it to true (dark theme)
-
-  // Add or remove the "dark-theme" class on the <body> element
-  document.body.classList.toggle("dark-theme");
-  // If the "dark-theme" class is not present, this will add it (activating dark theme)
-  // If the "dark-theme" class is already present, this will remove it (activating light theme)
-};
-
+  // Toggle between dark and light theme
+  const toggleTheme = () => {
+    setIsDarkTheme((prev) => !prev);
+    document.body.classList.toggle("dark-theme");
+  };
 
   return (
     <div className="container">
       <div className="header-container">
         <h1>Projects Filter</h1>
-        <label className="toggle-switch">
-          <input type="checkbox" checked={isDarkTheme} onChange={toggleTheme} />
-          <span className="slider"></span>
-        </label>
+        <div>
+          <ThemeToggleButton />
+        </div>
         <div className="filters-container">
-          {/* New input field for YouTube URL */}
           <div className="filter">
             <label>Add Project by YouTube URL</label>
             <input
@@ -229,7 +143,6 @@ const toggleTheme = () => {
             />
           </div>
 
-          {/* Filter by Project Name */}
           <div className="filter">
             <label>Filter by Project videoName</label>
             <select
@@ -245,7 +158,6 @@ const toggleTheme = () => {
             </select>
           </div>
 
-          {/* Filter by YouTube Channel */}
           <div className="filter">
             <label>Filter by YouTube Channel</label>
             <select
@@ -263,7 +175,6 @@ const toggleTheme = () => {
             </select>
           </div>
 
-          {/* Filter by Max Hours */}
           <div className="filter">
             <label>Filter by Max Hours</label>
             <select
@@ -279,7 +190,6 @@ const toggleTheme = () => {
             </select>
           </div>
 
-          {/* Filter by Tech Stack */}
           <div className="filter">
             <label>Filter by Tech Stack</label>
             <div style={{ position: "relative" }}>
@@ -305,7 +215,6 @@ const toggleTheme = () => {
             </div>
           </div>
 
-          {/* Filter by Difficulty */}
           <div className="filter">
             <label>Filter by Difficulty</label>
             <select
@@ -323,7 +232,6 @@ const toggleTheme = () => {
         </div>
       </div>
 
-      {/* Section to display filtered items */}
       <div className="items-container">
         {filteredItems.length > 0 ? (
           filteredItems.map((item, index) => (
