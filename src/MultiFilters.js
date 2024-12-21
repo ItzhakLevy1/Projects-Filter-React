@@ -17,6 +17,7 @@ export default function MultiFilters() {
 
   const [youtubeUrl, setYoutubeUrl] = useState(""); // State for YouTube URL input
   const [filteredItems, setFilteredItems] = useState(items); // State for storing the filtered items to display
+  const [isDarkTheme, setIsDarkTheme] = useState(false); // State for theme
 
   // Log initial state
   console.log("Initial filters state:", filters);
@@ -175,6 +176,7 @@ export default function MultiFilters() {
   const clearTechStackFilter = () => {
     handleFilterChange("techStack", "");
   };
+
   // Function to handle adding a new project based on YouTube URL
   const handleAddProject = async () => {
     // If the input URL is empty, do nothing
@@ -190,11 +192,28 @@ export default function MultiFilters() {
     setYoutubeUrl("");
   };
 
+  // Function to toggle the theme
+const toggleTheme = () => {
+  // Update the `isDarkTheme` state by toggling its current value
+  setIsDarkTheme((prevTheme) => !prevTheme); 
+  // If `isDarkTheme` is true, set it to false (light theme)
+  // If `isDarkTheme` is false, set it to true (dark theme)
+
+  // Add or remove the "dark-theme" class on the <body> element
+  document.body.classList.toggle("dark-theme");
+  // If the "dark-theme" class is not present, this will add it (activating dark theme)
+  // If the "dark-theme" class is already present, this will remove it (activating light theme)
+};
+
+
   return (
     <div className="container">
       <div className="header-container">
         <h1>Projects Filter</h1>
-
+        <label className="toggle-switch">
+          <input type="checkbox" checked={isDarkTheme} onChange={toggleTheme} />
+          <span className="slider"></span>
+        </label>
         <div className="filters-container">
           {/* New input field for YouTube URL */}
           <div className="filter">
