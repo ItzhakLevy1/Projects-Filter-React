@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { items as initialItems } from "./Items"; // Import a list of items to be filtered
+import { items as initialItems } from "./Items"; // Import a hard coded list of items to be filtered
 import ThemeToggleButton from "./components/ThemeToggleButton/ThemeToggleButton.js";
 import "./components/ThemeToggleButton/ThemeToggleButton.css";
-import "./style.css"; // Import custom styles
-import axios from 'axios'; // Import axios for API calls
+import "./style.css";
+import axios from "axios"; // Import axios for API calls
+import { mapCategory } from "./components/CategoryMapping"; // Import mapCategory function
 
 export default function MultiFilters() {
   const [filters, setFilters] = useState({
@@ -45,7 +46,7 @@ export default function MultiFilters() {
         2
       )} hours)`
     );
-    console.log("totalHours", totalHours);
+    // console.log("totalHours", totalHours);
     return totalHours;
   };
 
@@ -69,14 +70,24 @@ export default function MultiFilters() {
       }
 
       const data = await response.json();
-      console.log("API response:", data);
+      console.log("API response - data:", data);
       console.log(
-        "API response - Duration :",
-        data.items[0].contentDetails.duration
-      );
-      console.log(
-        "API response - channelTitle :",
+        "API response - channelTitle / Name :",
         data.items[0].snippet.channelTitle
+      );
+      const totalHours = parseDuration(data.items[0].contentDetails.duration);
+      console.log("API response - Duration / Length :", totalHours);
+      console.log(
+        "API response - Video's Name :",
+        data.items[0].snippet.localized.title
+      );
+
+      const categoryId = data.items[0].snippet.categoryId;
+      const categoryName = mapCategory(categoryId);
+
+      console.log(
+        "Category Name :",
+        mapCategory(data.items[0].snippet.categoryId)
       );
 
       if (data.items.length === 0) {
@@ -89,6 +100,15 @@ export default function MultiFilters() {
         data.items[0].contentDetails.duration
       );
 
+      // Determine difficulty based on totalHours
+      let difficulty = "Intermediate";
+      if (totalHours <= 5) {
+        difficulty = "Beginner";
+      } else if (totalHours > 10) {
+        difficulty = "Advanced";
+      }
+      console.log("Difficulty level :", difficulty);
+
       return {
         videoName: video.snippet.title,
         youtubeChannel: video.snippet.channelTitle,
@@ -96,7 +116,7 @@ export default function MultiFilters() {
           data.items[0].contentDetails.duration
         ),
         techStack: [], // You can populate this if needed
-        difficulty: "Intermediate", // You can adjust this as needed
+        difficulty: difficulty, // Set difficulty based on totalHours
         link: url,
       };
     } catch (error) {
@@ -196,10 +216,12 @@ export default function MultiFilters() {
       videoName: data.snippet.title,
       category: "Programming", // Example category, you can customize
       youtubeChannel: data.snippet.channelId,
-      lengthInHours: parseInt(data.contentDetails.duration.match(/\d+/)[0] / 60), // Extract video length in hours
+      lengthInHours: parseInt(
+        data.contentDetails.duration.match(/\d+/)[0] / 60
+      ), // Extract video length in hours
       techStack: 5, // Example value
       difficulty: 3, // Example value
-      link: `https://www.youtube.com/watch?v=${videoId}`
+      link: `https://www.youtube.com/watch?v=${videoId}`,
     };
 
     // Send POST request to backend
@@ -231,7 +253,7 @@ export default function MultiFilters() {
               }}
             />
           </div>
-          <form onSubmit={handleSubmit}>
+          {/* <form onSubmit={handleSubmit}>
             <label>
               Add Project by YouTube URL:
               <input
@@ -242,7 +264,7 @@ export default function MultiFilters() {
               />
             </label>
             <button type="submit">Submit</button>
-          </form>
+          </form> */}
           <div className="filter">
             <label>Filter by Project videoName</label>
             <select
