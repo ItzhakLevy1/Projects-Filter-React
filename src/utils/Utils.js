@@ -91,3 +91,33 @@ const parseISO8601Duration = (duration) => {
   const seconds = match[3] ? parseInt(match[3].replace("S", "")) : 0;
   return hours + minutes / 60 + seconds / 3600;
 };
+
+// Filtering function based on the filters state
+export const filterItems = (initialItems, filters) => {
+  return initialItems.filter((item) => {
+    const techKeywords = filters.techStack
+      .toLowerCase()
+      .split(" ")
+      .filter((word) => word.trim() !== "");
+    const isWithinMaxHours =
+      filters.maxHours === "" ||
+      (filters.maxHours === "0-5 hours" && item.lengthInHours <= 5) ||
+      (filters.maxHours === "5-10 hours" &&
+        item.lengthInHours > 5 &&
+        item.lengthInHours <= 10) ||
+      (filters.maxHours === "Above 10 hours" && item.lengthInHours > 10);
+
+    return (
+      (filters.videoName === "" || item.videoName === filters.videoName) &&
+      (filters.youtubeChannel === "" ||
+        item.youtubeChannel === filters.youtubeChannel) &&
+      item.lengthInHours >= filters.minHours &&
+      isWithinMaxHours &&
+      (techKeywords.length === 0 ||
+        techKeywords.some((keyword) =>
+          item.techStack.some((tech) => tech.toLowerCase().includes(keyword))
+        )) &&
+      (filters.difficulty === "" || item.difficulty === filters.difficulty)
+    );
+  });
+};

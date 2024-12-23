@@ -5,7 +5,7 @@ import "./components/ThemeToggleButton/ThemeToggleButton.css";
 import "./style.css";
 import axios from "axios"; // Import axios for API calls
 import { mapCategory } from "./components/CategoryMapping"; // Import mapCategory function
-import { parseDuration, fetchVideoDetails } from "./utils/Utils"; // Import parseDuration and fetchVideoDetails functions
+import { parseDuration, fetchVideoDetails, filterItems } from "./utils/Utils"; // Import parseDuration, fetchVideoDetails, and filterItems functions
 
 const difficulties = ["Beginner", "Intermediate", "Advanced"];
 const maxHourOptions = ["0-5 hours", "5-10 hours", "Above 10 hours"];
@@ -39,7 +39,7 @@ export default function MultiFilters() {
   const [url, setUrl] = useState("");
 
   useEffect(() => {
-    filterItems();
+    setFilteredItems(filterItems(initialItems, filters));
   }, [filters]);
 
   useEffect(() => {
@@ -49,38 +49,6 @@ export default function MultiFilters() {
       document.body.classList.remove("dark-theme");
     }
   }, [isDarkTheme]); // Run this effect whenever `isDarkTheme` changes
-
-  // Filtering function based on the filters state
-  const filterItems = () => {
-    let filtered = initialItems.filter((item) => {
-      const techKeywords = filters.techStack
-        .toLowerCase()
-        .split(" ")
-        .filter((word) => word.trim() !== "");
-      const isWithinMaxHours =
-        filters.maxHours === "" ||
-        (filters.maxHours === "0-5 hours" && item.lengthInHours <= 5) ||
-        (filters.maxHours === "5-10 hours" &&
-          item.lengthInHours > 5 &&
-          item.lengthInHours <= 10) ||
-        (filters.maxHours === "Above 10 hours" && item.lengthInHours > 10);
-
-      return (
-        (filters.videoName === "" || item.videoName === filters.videoName) &&
-        (filters.youtubeChannel === "" ||
-          item.youtubeChannel === filters.youtubeChannel) &&
-        item.lengthInHours >= filters.minHours &&
-        isWithinMaxHours &&
-        (techKeywords.length === 0 ||
-          techKeywords.some((keyword) =>
-            item.techStack.some((tech) => tech.toLowerCase().includes(keyword))
-          )) &&
-        (filters.difficulty === "" || item.difficulty === filters.difficulty)
-      );
-    });
-
-    setFilteredItems(filtered);
-  };
 
   // Update filter values dynamically
   const handleFilterChange = (key, value) => {
