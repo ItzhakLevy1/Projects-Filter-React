@@ -6,6 +6,22 @@ import "./style.css";
 import axios from "axios"; // Import axios for API calls
 import { mapCategory } from "./components/CategoryMapping"; // Import mapCategory function
 
+const difficulties = ["Beginner", "Intermediate", "Advanced"];
+const maxHourOptions = ["0-5 hours", "5-10 hours", "Above 10 hours"];
+const uniqueProjectvideoNames = [
+  ...new Set(initialItems.map((item) => item.videoName)),
+];
+const uniqueYouTubeChannels = [
+  ...new Set(initialItems.map((item) => item.youtubeChannel)),
+];
+const uniqueTechStack = [
+  ...new Set(
+    initialItems.flatMap((item) =>
+      item.techStack.map((tech) => tech.toLowerCase())
+    )
+  ),
+].sort();
+
 export default function MultiFilters() {
   const [filters, setFilters] = useState({
     videoName: "",
@@ -70,32 +86,25 @@ export default function MultiFilters() {
       }
 
       const data = await response.json();
-      console.log("API response - data:", data);
-      console.log(
-        "API response - channelTitle / Name :",
-        data.items[0].snippet.channelTitle
-      );
       const totalHours = parseDuration(data.items[0].contentDetails.duration);
-      console.log("API response - Duration / Length :", totalHours);
-      console.log(
-        "API response - Video's Name :",
-        data.items[0].snippet.localized.title
-      );
-
       const categoryId = data.items[0].snippet.categoryId;
       const categoryName = mapCategory(categoryId);
+      const channelTitle = data.items[0].snippet.channelTitle;
+      const videoName = data.items[0].snippet.localized.title;
+      const video = data.items[0];
 
-      console.log(
-        "Category Name :",
-        mapCategory(data.items[0].snippet.categoryId)
-      );
+      console.log("API response - data:", data);
+      console.log("API response - channelTitle / Name :", channelTitle);
+      console.log("API response - Duration / Length :", totalHours);
+      console.log("API response - Video's Name :", videoName);
+      console.log("Category Name :", categoryName);
+      console.log("video :", video);
 
       if (data.items.length === 0) {
         console.log("No video found with the provided video ID.");
         return;
       }
 
-      const video = data.items[0];
       const videoDurationInHours = parseDuration(
         data.items[0].contentDetails.duration
       );
@@ -131,22 +140,6 @@ export default function MultiFilters() {
     const seconds = match[3] ? parseInt(match[3].replace("S", "")) : 0;
     return hours + minutes / 60 + seconds / 3600;
   };
-
-  const difficulties = ["Beginner", "Intermediate", "Advanced"];
-  const maxHourOptions = ["0-5 hours", "5-10 hours", "Above 10 hours"];
-  const uniqueProjectvideoNames = [
-    ...new Set(initialItems.map((item) => item.videoName)),
-  ];
-  const uniqueYouTubeChannels = [
-    ...new Set(initialItems.map((item) => item.youtubeChannel)),
-  ];
-  const uniqueTechStack = [
-    ...new Set(
-      initialItems.flatMap((item) =>
-        item.techStack.map((tech) => tech.toLowerCase())
-      )
-    ),
-  ].sort();
 
   // Filtering function based on the filters state
   const filterItems = () => {
