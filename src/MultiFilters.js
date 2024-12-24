@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { items as initialItems } from "./Items"; // Import a hard coded list of items to be filtered
+import { items as initialItems } from "./Items"; // Hardcoded list of items
 import ThemeToggleButton from "./components/ThemeToggleButton/ThemeToggleButton.js";
 import "./components/ThemeToggleButton/ThemeToggleButton.css";
 import "./style.css";
-import axios from "axios"; // Import axios for API calls
-import { mapCategory } from "./components/CategoryMapping"; // Import mapCategory function
-import { parseDuration, fetchVideoDetails, filterItems } from "./utils/Utils"; // Import parseDuration, fetchVideoDetails, and filterItems functions
+import axios from "axios";
+import { mapCategory } from "./components/CategoryMapping.js";
+import { parseDuration, filterItems } from "./utils/Utils";
+import { fetchVideoDetails } from "./components/services/YoutubeService.js";
 
 const difficulties = ["Beginner", "Intermediate", "Advanced"];
 const maxHourOptions = ["0-5 hours", "5-10 hours", "Above 10 hours"];
@@ -36,70 +37,36 @@ export default function MultiFilters() {
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [filteredItems, setFilteredItems] = useState(initialItems);
   const [isDarkTheme, setIsDarkTheme] = useState(true);
-  const [url, setUrl] = useState("");
 
   useEffect(() => {
-    setFilteredItems(filterItems(initialItems, filters));
+    console.log("Filters updated:", filters);
   }, [filters]);
 
   useEffect(() => {
-    if (isDarkTheme) {
-      document.body.classList.add("dark-theme");
-    } else {
-      document.body.classList.remove("dark-theme");
-    }
-  }, [isDarkTheme]); // Run this effect whenever `isDarkTheme` changes
+    console.log("Theme updated:", isDarkTheme ? "Dark" : "Light");
+  }, [isDarkTheme]);
 
-  // Update filter values dynamically
   const handleFilterChange = (key, value) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [key]: value,
+    }));
   };
 
-  // Clear tech stack filter
   const clearTechStackFilter = () => {
-    handleFilterChange("techStack", "");
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      techStack: "",
+    }));
   };
 
-  // Add a new project from YouTube URL
   const handleAddProject = async () => {
-    if (!youtubeUrl) return;
-
-    const newItem = await fetchVideoDetails(youtubeUrl);
-    setFilteredItems((prevItems) => [...prevItems, newItem]);
-    setYoutubeUrl(""); // Clear input
-  };
-
-  const handleInputChange = (e) => {
-    setUrl(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // YouTube Data API call
-    const videoId = url.split("v=")[1]; // Get video ID from URL
-    const response = await axios.get(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoId}&key=${process.env.REACT_APP_YOUTUBE_API_KEY}`
-    );
-    const data = response.data.items[0];
-    const itemData = {
-      videoName: data.snippet.title,
-      category: "Programming", // Example category, you can customize
-      youtubeChannel: data.snippet.channelId,
-      lengthInHours: parseInt(
-        data.contentDetails.duration.match(/\d+/)[0] / 60
-      ), // Extract video length in hours
-      techStack: 5, // Example value
-      difficulty: 3, // Example value
-      link: `https://www.youtube.com/watch?v=${videoId}`,
-    };
-
-    // Send POST request to backend
     try {
-      await axios.post("http://localhost:5000/api/items", itemData);
-      console.log("Item added:", itemData);
-    } catch (err) {
-      console.error("Error adding item:", err);
+      const videoDetails = await fetchVideoDetails(youtubeUrl);
+      console.log("Video details fetched:", videoDetails);
+      // Your logic to add the project
+    } catch (error) {
+      console.error("Error fetching video details:", error);
     }
   };
 
@@ -123,18 +90,7 @@ export default function MultiFilters() {
               }}
             />
           </div>
-          {/* <form onSubmit={handleSubmit}>
-            <label>
-              Add Project by YouTube URL:
-              <input
-                type="text"
-                value={url}
-                onChange={handleInputChange}
-                placeholder="Enter YouTube URL"
-              />
-            </label>
-            <button type="submit">Submit</button>
-          </form> */}
+
           <div className="filter">
             <label>Filter by Project videoName</label>
             <select
