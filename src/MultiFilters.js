@@ -6,7 +6,11 @@ import "./style.css";
 import axios from "axios";
 import { mapCategory } from "./components/CategoryMapping.js";
 import { parseDuration, filterItems } from "./utils/Utils";
-import { fetchVideoDetails } from "./components/services/YoutubeService.js";
+import {
+  fetchVideoDetails,
+  extractVideoId,
+  videoCache,
+} from "./components/services/YoutubeService.js";
 
 const difficulties = ["Beginner", "Intermediate", "Advanced"];
 const maxHourOptions = ["0-5 hours", "5-10 hours", "Above 10 hours"];
@@ -37,6 +41,7 @@ export default function MultiFilters() {
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [filteredItems, setFilteredItems] = useState(initialItems);
   const [isDarkTheme, setIsDarkTheme] = useState(true);
+  const [addedProject, setAddedProject] = useState(null);
 
   useEffect(() => {
     console.log("Filters updated:", filters);
@@ -63,8 +68,8 @@ export default function MultiFilters() {
   const handleAddProject = async () => {
     try {
       const videoDetails = await fetchVideoDetails(youtubeUrl);
-      console.log("Video details fetched:", videoDetails);
-      // Your logic to add the project
+      // console.log("Video details fetched:", videoDetails);
+      setAddedProject(videoDetails); // Save details to state
     } catch (error) {
       console.error("Error fetching video details:", error);
     }
