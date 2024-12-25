@@ -1,8 +1,17 @@
-import React, { useState } from "react";
-import "./ThemeToggleButton.css"; // Import the CSS file for the component
+import React, { useState, useEffect } from "react";
+import "./ThemeToggleButton.css"; 
 
 const ThemeToggleButton = () => {
-  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(true); // Set default to true
+
+  useEffect(() => {
+    // Add the dark-theme class to the body when the component mounts to apply dark theme by default
+    if (isDarkTheme) {
+      document.body.classList.add("dark-theme");
+    } else {
+      document.body.classList.remove("dark-theme");
+    }
+  }, [isDarkTheme]);
 
   // Toggle theme based on the button clicked
   const toggleTheme = (theme) => {
