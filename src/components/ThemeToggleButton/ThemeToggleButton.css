@@ -38,6 +38,11 @@
 }
 
 .theme-toggle-btn:active {
+  box-shadow: -1px -1px 10px 2px #1c1412, 3px 3px 10px 3px #4e4745; /* how the button looks when it is pressed down (before letting go) */
+}
+
+.theme-toggle-btn:active,
+.theme-toggle-btn.clicked {
   box-shadow: -1px -1px 10px 2px #1c1412, 3px 3px 10px 3px #4e4745;
 }
 
