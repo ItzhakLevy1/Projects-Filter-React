@@ -34,7 +34,7 @@
 }
 
 .theme-toggle-btn.active i {
-  color: #a8a39b; /* Active button color */
+  /* color: #a8a39b;  */
 }
 
 .theme-toggle-btn:active {

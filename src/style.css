@@ -41,6 +41,7 @@ body {
   padding: 0;
   background-color: var(--background-color);
   color: var(--text-color);
+  overflow: hidden; /* Disable scrolling */
 }
 
 h1 {
@@ -59,26 +60,27 @@ p {
 
 .container {
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+  justify-content: space-between; /* Align filters and items on opposite sides */
+  align-items: flex-start;
   height: 100vh;
-  padding: 20px;
+  padding: 1rem 1rem;
+  column-gap: 7em;
+  overflow: hidden; /* Disable scrolling */
 }
 
 .filters-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 20px;
+  flex-direction: column;
+  align-items: flex-end; /* Align filters to the right */
+  gap: 1em;
+  margin-bottom: 1em;
 }
 
 .filter {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  width: 200px;
+  width: 15em;
   text-align: center;
   position: relative;
 }
@@ -120,11 +122,21 @@ p {
 .items-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start; /* Align items to the left */
   gap: 20px;
   padding: 20px;
-  max-height: 50vh;
+  max-height: 100vh;
   overflow-y: auto;
+
+      display: flex
+;
+    flex-wrap: wrap;
+    /* justify-content: flex-start; */
+    gap: 20px;
+    /* padding: 20px; */
+    /* max-height: fit-content; */
+    overflow-y: auto;
+    margin-bottom: 2em;
 }
 
 .item {
@@ -176,14 +188,6 @@ a:hover {
   color: var(--primary-color);
 }
 
-.toggle-switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-  margin: 20px 0;
-}
-
 .toggle-switch input {
   opacity: 0;
   width: 0;
@@ -225,6 +229,23 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX(26px);
+}
+
+.header-container {
+  /* display: flex;
+  justify-content: space-between;
+  align-items: center; */
+  width: -webkit-fill-available; /* Create space between the title and the theme btns */
+}
+
+.header-title {
+  font-size: 1rem; /* Set the size of the Projects Filter title */
+  margin: 0;
+}
+
+.theme-toggle-container {
+  display: flex;
+  gap: 10px; /* Space between the buttons */
 }
 
 /* Media queries for mobile screens */

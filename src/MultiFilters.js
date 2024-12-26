@@ -72,10 +72,10 @@ export default function MultiFilters() {
         alert("YouTube URL must not be empty");
         return;
       }
-  
+
       // Fetch video details
       const videoDetails = await fetchVideoDetails(youtubeUrl);
-  
+
       // Extract the necessary fields
       const {
         title: videoName,
@@ -86,7 +86,7 @@ export default function MultiFilters() {
         difficulty = "Beginner",
         link = youtubeUrl,
       } = videoDetails;
-  
+
       // Prepare the data for the backend
       const newItem = {
         videoName,
@@ -97,17 +97,17 @@ export default function MultiFilters() {
         difficulty,
         link,
       };
-  
+
       console.log("Prepared New Item:", newItem);
-  
+
       // Test simple payload first
       const testData = "Hello, Backend!"; // Change this to a number if needed, e.g., 123
       const response = await axios.post("http://localhost:5000/api/test", {
         data: testData,
       });
-  
+
       console.log("Backend Response:", response);
-  
+
       if (response.status === 201) {
         alert("Project added successfully!");
         setAddedProject(response.data); // Update state with the added project
@@ -115,17 +115,22 @@ export default function MultiFilters() {
         alert("Failed to add project. Please try again.");
       }
     } catch (error) {
-      console.error("Error adding project:", error.response || error.message || error);
+      console.error(
+        "Error adding project:",
+        error.response || error.message || error
+      );
       alert("An error occurred. Please check the console for details.");
     }
   };
 
   return (
     <div className="container">
-      <div className="header-container">
-        <h1>Projects Filter</h1>
-        <div>
-          <ThemeToggleButton />
+      <div className="asd">
+        <div className="header-container">
+          {/* <h1 className="header-title">Projects Filter</h1> */}
+          <div>
+            <ThemeToggleButton />
+          </div>
         </div>
         <div className="filters-container">
           <div className="filter">
@@ -195,7 +200,7 @@ export default function MultiFilters() {
               <input
                 type="text"
                 list="techStackSuggestions"
-                placeholder="Enter keywords (e.g., React Node)"
+                placeholder="Enter keywords"
                 value={filters.techStack}
                 onChange={(e) =>
                   handleFilterChange("techStack", e.target.value)
