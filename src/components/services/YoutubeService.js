@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const videoCache = new Map();
 
 async function fetchVideoDetails(url) {
@@ -52,6 +54,10 @@ async function fetchFromYouTubeAPI(videoId, url) {
         link: url, // Original YouTube URL
       };
       console.log("Fetched from API:", videoDetails);
+
+      // Send video details to backend
+      await sendVideoDetailsToBackend(videoDetails);
+
       return videoDetails;
     } else {
       throw new Error("Video not found");
@@ -59,6 +65,19 @@ async function fetchFromYouTubeAPI(videoId, url) {
   } catch (error) {
     console.error("Error fetching from YouTube API:", error);
     throw error;
+  }
+}
+
+// Helper function to send video details to backend
+async function sendVideoDetailsToBackend(videoDetails) {
+  try {
+    const response = await axios.post(
+      "http://localhost:5000/api/items",
+      videoDetails
+    );
+    console.log("Video details sent to backend:", response.data);
+  } catch (error) {
+    console.error("Error sending video details to backend:", error);
   }
 }
 

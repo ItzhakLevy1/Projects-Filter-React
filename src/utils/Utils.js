@@ -69,18 +69,32 @@ export const fetchVideoDetails = async (url) => {
 
 // Helper function to parse ISO 8601 duration to hours
 export const parseDuration = (isoDuration) => {
+  // Validate input
+  if (!isoDuration || typeof isoDuration !== "string") {
+    console.error("Invalid duration:", isoDuration);
+    return 0; // Default to 0 if the input is invalid
+  }
+
+  // Match the ISO 8601 duration pattern
   const match = isoDuration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+  if (!match) {
+    console.error("Invalid ISO 8601 duration format:", isoDuration);
+    return 0; // Default to 0 if no match
+  }
+
+  // Parse hours, minutes, and seconds
   const hours = parseInt(match[1]?.replace("H", "") || "0", 10);
   const minutes = parseInt(match[2]?.replace("M", "") || "0", 10);
   const seconds = parseInt(match[3]?.replace("S", "") || "0", 10);
 
+  // Calculate total hours
   const totalHours = hours + minutes / 60 + seconds / 3600;
   console.log(
     `Duration parsed: ${hours} hours, ${minutes} minutes, ${seconds} seconds (${totalHours.toFixed(
       2
     )} hours)`
   );
-  // console.log("totalHours", totalHours);
+
   return totalHours;
 };
 

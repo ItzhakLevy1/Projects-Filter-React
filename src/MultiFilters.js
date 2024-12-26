@@ -66,12 +66,57 @@ export default function MultiFilters() {
   };
 
   const handleAddProject = async () => {
+    console.log("handleAddProject called");
     try {
+      if (!youtubeUrl) {
+        alert("YouTube URL must not be empty");
+        return;
+      }
+  
+      // Fetch video details
       const videoDetails = await fetchVideoDetails(youtubeUrl);
-      // console.log("Video details fetched:", videoDetails);
-      setAddedProject(videoDetails); // Save details to state
+  
+      // Extract the necessary fields
+      const {
+        title: videoName,
+        description: category,
+        channelTitle: youtubeChannel,
+        duration: lengthInHours,
+        techStack = [],
+        difficulty = "Beginner",
+        link = youtubeUrl,
+      } = videoDetails;
+  
+      // Prepare the data for the backend
+      const newItem = {
+        videoName,
+        category,
+        youtubeChannel,
+        lengthInHours: parseDuration(lengthInHours), // Convert ISO 8601 duration to hours
+        techStack,
+        difficulty,
+        link,
+      };
+  
+      console.log("Prepared New Item:", newItem);
+  
+      // Test simple payload first
+      const testData = "Hello, Backend!"; // Change this to a number if needed, e.g., 123
+      const response = await axios.post("http://localhost:5000/api/test", {
+        data: testData,
+      });
+  
+      console.log("Backend Response:", response);
+  
+      if (response.status === 201) {
+        alert("Project added successfully!");
+        setAddedProject(response.data); // Update state with the added project
+      } else {
+        alert("Failed to add project. Please try again.");
+      }
     } catch (error) {
-      console.error("Error fetching video details:", error);
+      console.error("Error adding project:", error.response || error.message || error);
+      alert("An error occurred. Please check the console for details.");
     }
   };
 
@@ -94,6 +139,7 @@ export default function MultiFilters() {
                 if (e.key === "Enter") handleAddProject();
               }}
             />
+            <button onClick={handleAddProject}>Add Project</button>
           </div>
 
           <div className="filter">
