@@ -20,18 +20,19 @@ export const fetchVideoDetails = async (url) => {
     }
 
     const data = await response.json();
-    const totalHours = parseDuration(data.items[0].contentDetails.duration);
-    const categoryId = data.items[0].snippet.categoryId;
-    const categoryName = mapCategory(categoryId);
-    const channelTitle = data.items[0].snippet.channelTitle;
-    const videoName = data.items[0].snippet.localized.title;
     const video = data.items[0];
 
     console.log("API response - data:", data);
-    console.log("API response - channelTitle / Name :", channelTitle);
-    console.log("API response - Duration / Length :", totalHours);
-    console.log("API response - Video's Name :", videoName);
-    console.log("Category Name :", categoryName);
+    console.log(
+      "API response - channelTitle / Name :",
+      video.snippet.channelTitle
+    );
+    console.log(
+      "API response - Duration / Length :",
+      video.contentDetails.duration
+    );
+    console.log("API response - Video's Name :", video.snippet.localized.title);
+    console.log("Category Name :", mapCategory(video.snippet.categoryId));
     console.log("video :", video);
 
     if (data.items.length === 0) {
@@ -39,15 +40,13 @@ export const fetchVideoDetails = async (url) => {
       return;
     }
 
-    const videoDurationInHours = parseDuration(
-      data.items[0].contentDetails.duration
-    );
+    const videoDurationInHours = parseDuration(video.contentDetails.duration);
 
     // Determine difficulty based on totalHours
     let difficulty = "Intermediate";
-    if (totalHours <= 5) {
+    if (videoDurationInHours.hours <= 5) {
       difficulty = "Beginner";
-    } else if (totalHours > 10) {
+    } else if (videoDurationInHours.hours > 10) {
       difficulty = "Advanced";
     }
     console.log("Difficulty level :", difficulty);
@@ -55,9 +54,7 @@ export const fetchVideoDetails = async (url) => {
     return {
       videoName: video.snippet.title,
       youtubeChannel: video.snippet.channelTitle,
-      videoDurationInHours: parseISO8601Duration(
-        data.items[0].contentDetails.duration
-      ),
+      duration: video.contentDetails.duration, // Ensure duration is extracted
       techStack: [], // You can populate this if needed
       difficulty: difficulty, // Set difficulty based on totalHours
       link: url,
@@ -69,17 +66,19 @@ export const fetchVideoDetails = async (url) => {
 
 // Helper function to parse ISO 8601 duration to hours
 export const parseDuration = (isoDuration) => {
+  console.log("Parsing duration:", isoDuration); // Log the input duration
+
   // Validate input
   if (!isoDuration || typeof isoDuration !== "string") {
     console.error("Invalid duration:", isoDuration);
-    return 0; // Default to 0 if the input is invalid
+    return { hours: 0, minutes: 0 }; // Default to 0 if the input is invalid
   }
 
   // Match the ISO 8601 duration pattern
   const match = isoDuration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
   if (!match) {
     console.error("Invalid ISO 8601 duration format:", isoDuration);
-    return 0; // Default to 0 if no match
+    return { hours: 0, minutes: 0 }; // Default to 0 if no match
   }
 
   // Parse hours, minutes, and seconds
@@ -87,18 +86,19 @@ export const parseDuration = (isoDuration) => {
   const minutes = parseInt(match[2]?.replace("M", "") || "0", 10);
   const seconds = parseInt(match[3]?.replace("S", "") || "0", 10);
 
-  // Calculate total hours
-  const totalHours = hours + minutes / 60 + seconds / 3600;
+  // Calculate total hours and minutes
+  const totalMinutes = hours * 60 + minutes + Math.round(seconds / 60);
+  const resultHours = Math.floor(totalMinutes / 60);
+  const resultMinutes = totalMinutes % 60;
+
   console.log(
-    `Duration parsed: ${hours} hours, ${minutes} minutes, ${seconds} seconds (${totalHours.toFixed(
-      2
-    )} hours)`
+    `Duration parsed: ${hours} hours, ${minutes} minutes, ${seconds} seconds (${resultHours} hours, ${resultMinutes} minutes)`
   );
 
-  return totalHours;
+  return { hours: resultHours, minutes: resultMinutes };
 };
 
-const parseISO8601Duration = (duration) => {
+export const parseISO8601Duration = (duration) => {
   const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
   const hours = match[1] ? parseInt(match[1].replace("H", "")) : 0;
   const minutes = match[2] ? parseInt(match[2].replace("M", "")) : 0;

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { parseISO8601Duration } from "../../utils/Utils";
 
 const videoCache = new Map();
 
@@ -80,17 +81,5 @@ async function sendVideoDetailsToBackend(videoDetails) {
     console.error("Error sending video details to backend:", error);
   }
 }
-
-// Helper function to convert ISO 8601 duration to hours
-const parseISO8601Duration = (duration) => {
-  // Match the ISO 8601 duration format (e.g., "PT1H30M45S")
-  const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-  // Extract hours, minutes, and seconds, defaulting to 0 if not present
-  const hours = match[1] ? parseInt(match[1].replace("H", "")) : 0;
-  const minutes = match[2] ? parseInt(match[2].replace("M", "")) : 0;
-  const seconds = match[3] ? parseInt(match[3].replace("S", "")) : 0;
-  // Convert total time to hours (fractional hours for minutes and seconds)
-  return hours + minutes / 60 + seconds / 3600;
-};
 
 export { fetchVideoDetails, extractVideoId, videoCache };

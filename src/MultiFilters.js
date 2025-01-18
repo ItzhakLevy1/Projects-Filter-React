@@ -81,18 +81,21 @@ export default function MultiFilters() {
         title: videoName,
         description: category,
         channelTitle: youtubeChannel,
-        duration: lengthInHours,
+        videoDurationInHours,
         techStack = [],
         difficulty = "Beginner",
         link = youtubeUrl,
       } = videoDetails;
+
+      // Log the video duration
+      console.log("Video duration in hours:", videoDurationInHours);
 
       // Prepare the data for the backend
       const newItem = {
         videoName,
         category,
         youtubeChannel,
-        lengthInHours: parseDuration(lengthInHours), // Convert ISO 8601 duration to hours
+        lengthInHours: videoDurationInHours, // Use the videoDurationInHours directly
         techStack,
         difficulty,
         link,
@@ -101,7 +104,7 @@ export default function MultiFilters() {
       console.log("Prepared New Item:", newItem);
 
       // Test simple payload first
-      const testData = "Hello, Backend!"; // Change this to a number if needed, e.g., 123
+      const testData = newItem;
       const response = await axios.post("http://localhost:5000/api/test", {
         data: testData,
       });
@@ -247,7 +250,7 @@ export default function MultiFilters() {
                 <strong>YouTube:</strong> {item.youtubeChannel}
               </p>
               <p>
-                <strong>Length:</strong> {item.videoDurationInHours} hours
+                <strong>Length:</strong> {item.lengthInHours > 0 ? `${Math.floor(item.lengthInHours)} hours ${Math.round((item.lengthInHours % 1) * 60)} minutes` : "< 1 hour"}
               </p>
               <p>
                 <strong>Tech Stack:</strong> {item.techStack.join(", ")}
