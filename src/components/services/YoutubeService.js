@@ -1,5 +1,6 @@
 import axios from "axios";
 import { parseISO8601Duration } from "../../utils/Utils";
+import keywords from "../../keywords.json"; // Import keywords
 
 const videoCache = new Map();
 
@@ -40,17 +41,25 @@ async function fetchFromYouTubeAPI(videoId, url) {
       `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,contentDetails&key=${apiKey}`
     );
     const data = await response.json();
+    // Look for a match in the video description with the keywords
     if (data.items && data.items.length > 0) {
+      const description = data.items[0].snippet.description;
+      const matchedKeywords = keywords.keywords.filter((keyword) =>
+        description.toLowerCase().includes(keyword.toLowerCase())
+      );
+
+      console.log("Matched keywords:", matchedKeywords);
+
       const videoDetails = {
         id: videoId,
         title: data.items[0].snippet.title,
-        description: data.items[0].snippet.description,
+        description: description,
         videoName: data.items[0].snippet.title,
-        youtubeChannel: data.items[0].snippet.channelTitle,
+        youtubeChannel: data.items[0].snippet.channelTitle, // Ensure youtubeChannel is extracted
         videoDurationInHours: parseISO8601Duration(
           data.items[0].contentDetails.duration
         ),
-        techStack: [], // Placeholder for tech stack (can be extracted if available)
+        techStack: matchedKeywords, // Use matched keywords as tech stack
         difficulty: "Intermediate", // Default difficulty (adjust as needed)
         link: url, // Original YouTube URL
       };

@@ -79,8 +79,8 @@ export default function MultiFilters() {
       // Extract the necessary fields
       const {
         title: videoName,
-        description: category,
-        channelTitle: youtubeChannel,
+        description: description,
+        youtubeChannel, // Ensure youtubeChannel is extracted
         videoDurationInHours,
         techStack = [],
         difficulty = "Beginner",
@@ -93,7 +93,7 @@ export default function MultiFilters() {
       // Prepare the data for the backend
       const newItem = {
         videoName,
-        category,
+        description,
         youtubeChannel,
         lengthInHours: videoDurationInHours, // Use the videoDurationInHours directly
         techStack,
@@ -250,7 +250,12 @@ export default function MultiFilters() {
                 <strong>YouTube:</strong> {item.youtubeChannel}
               </p>
               <p>
-                <strong>Length:</strong> {item.lengthInHours > 0 ? `${Math.floor(item.lengthInHours)} hours ${Math.round((item.lengthInHours % 1) * 60)} minutes` : "< 1 hour"}
+                <strong>Length:</strong>{" "}
+                {item.lengthInHours > 0
+                  ? `${Math.floor(item.lengthInHours)} hours ${Math.round(
+                      (item.lengthInHours % 1) * 60
+                    )} minutes`
+                  : "< 1 hour"}
               </p>
               <p>
                 <strong>Tech Stack:</strong> {item.techStack.join(", ")}
