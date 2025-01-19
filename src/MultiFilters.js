@@ -79,8 +79,8 @@ export default function MultiFilters() {
       // Extract the necessary fields
       const {
         title: videoName,
-        description: description,
-        youtubeChannel, // Ensure youtubeChannel is extracted
+        // description: description,
+        youtubeChannel,
         videoDurationInHours,
         techStack = [],
         difficulty = "Beginner",
@@ -93,7 +93,6 @@ export default function MultiFilters() {
       // Prepare the data for the backend
       const newItem = {
         videoName,
-        description,
         youtubeChannel,
         lengthInHours: videoDurationInHours, // Use the videoDurationInHours directly
         techStack,

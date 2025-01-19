@@ -53,7 +53,7 @@ async function fetchFromYouTubeAPI(videoId, url) {
       const videoDetails = {
         id: videoId,
         title: data.items[0].snippet.title,
-        description: description,
+        // description: description,
         videoName: data.items[0].snippet.title,
         youtubeChannel: data.items[0].snippet.channelTitle, // Ensure youtubeChannel is extracted
         videoDurationInHours: parseISO8601Duration(
