@@ -16,7 +16,8 @@ export const items = [
     link: "https://www.youtube.com/watch?v=Vr-QHtbmd38",
   },
   {
-    videoName: "How To Build a Netflix Clone with MERN Stack in 2024 - Full Course",
+    videoName:
+      "How To Build a Netflix Clone with MERN Stack in 2024 - Full Course",
     category: "Web Development",
     youtubeChannel: "As a Programmer",
     lengthInHours: 7,

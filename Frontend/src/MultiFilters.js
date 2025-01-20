@@ -104,7 +104,7 @@ export default function MultiFilters() {
 
       // Test simple payload first
       const testData = newItem;
-      const response = await axios.post("http://localhost:5000/api/test", {
+      const response = await axios.post("http://localhost:5000/api/save-data", {
         data: testData,
       });
 

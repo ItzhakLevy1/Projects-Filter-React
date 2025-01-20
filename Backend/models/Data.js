@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"); // Import mongoose to define the schema
 
+/* Define the data schema with required fields */
 const dataSchema = new mongoose.Schema({
   data: {
     type: Object,
@@ -11,6 +12,8 @@ const dataSchema = new mongoose.Schema({
   },
 });
 
+// Create the DataModel from the schema
 const DataModel = mongoose.model("Data", dataSchema);
 
+// Export the DataModel
 module.exports = DataModel;
