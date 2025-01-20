@@ -26,6 +26,7 @@ export default function MultiFilters() {
 
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
+  const [allItems, setAllItems] = useState([]); // Store all items
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const [addedProject, setAddedProject] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
@@ -33,6 +34,7 @@ export default function MultiFilters() {
 
   useEffect(() => {
     console.log("Filters updated:", filters);
+    applyFilters(); // Apply filters whenever filters state changes
   }, [filters]);
 
   useEffect(() => {
@@ -44,7 +46,8 @@ export default function MultiFilters() {
     const fetchItems = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/items");
-        setFilteredItems(response.data);
+        setAllItems(response.data); // Store all items
+        setFilteredItems(response.data); // Initially display all items
         console.log("Fetched projects from backend:", response.data); // Log fetched projects
       } catch (error) {
         console.error("Error fetching items from backend:", error);
@@ -117,7 +120,8 @@ export default function MultiFilters() {
       if (response.status === 201) {
         alert("Project added successfully!");
         setAddedProject(response.data); // Update state with the added project
-        setFilteredItems((prevItems) => [...prevItems, newItem]); // Add the new project to the list
+        setAllItems((prevItems) => [...prevItems, newItem]); // Add the new project to the list
+        applyFilters(); // Apply filters to include the new project
       } else if (response.status === 409) {
         alert("Data already exists");
       } else {
@@ -147,6 +151,11 @@ export default function MultiFilters() {
       }
       return newDoneProjects;
     });
+  };
+
+  const applyFilters = () => {
+    const filtered = filterItems(allItems, filters);
+    setFilteredItems(filtered);
   };
 
   return (
@@ -180,7 +189,7 @@ export default function MultiFilters() {
               onChange={(e) => handleFilterChange("videoName", e.target.value)}
             >
               <option value="">Select Project</option>
-              {filteredItems.map((item, index) => (
+              {allItems.map((item, index) => (
                 <option key={index} value={item.videoName}>
                   {item.videoName}
                 </option>
@@ -197,7 +206,7 @@ export default function MultiFilters() {
               }
             >
               <option value="">Select Channel</option>
-              {filteredItems.map((item, index) => (
+              {allItems.map((item, index) => (
                 <option key={index} value={item.youtubeChannel}>
                   {item.youtubeChannel}
                 </option>
@@ -233,7 +242,7 @@ export default function MultiFilters() {
                 }
               />
               <datalist id="techStackSuggestions">
-                {filteredItems
+                {allItems
                   .flatMap((item) => item.techStack)
                   .map((tech, index) => (
                     <option key={index} value={tech} />
