@@ -22,7 +22,7 @@ body.dark-theme {
   --item-background-color: #1e293b;
   --item-text-color: #ffcc00;
   --item-hover-background-color: #333;
-  --item-hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  --item-hover-shadow: 0 6px 12px #00ff33b2;
   --toggle-background: #ffcc00;
   --toggle-text: "Dark";
   background: linear-gradient(
@@ -161,6 +161,15 @@ p {
 .item:hover {
   transform: translateY(-5px);
   box-shadow: var(--item-hover-shadow);
+  color: var(--item-hover-shadow); /* Change text color on hover */
+}
+
+.item:hover p {
+  color: #00ff33b2; /* Change title and text color on hover */
+  transition: color 0.3s; /* Add transition for color */
+}
+.item:hover a {
+  color: white; /* Change link text color to white on hover */
 }
 
 .item p {
