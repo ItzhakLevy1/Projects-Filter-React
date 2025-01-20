@@ -66,6 +66,13 @@ export default function MultiFilters() {
     }));
   };
 
+  const clearFilter = (key) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [key]: "",
+    }));
+  };
+
   const clearTechStackFilter = () => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -187,49 +194,70 @@ export default function MultiFilters() {
 
           <div className="filter">
             <label>Filter by Project videoName</label>
-            <select
-              value={filters.videoName}
-              onChange={(e) => handleFilterChange("videoName", e.target.value)}
-            >
-              <option value="">Select Project</option>
-              {allItems.map((item, index) => (
-                <option key={index} value={item.videoName}>
-                  {item.videoName}
-                </option>
-              ))}
-            </select>
+            <div style={{ position: "relative" }}>
+              <select
+                value={filters.videoName}
+                onChange={(e) => handleFilterChange("videoName", e.target.value)}
+              >
+                <option value="">Select Project</option>
+                {allItems.map((item, index) => (
+                  <option key={index} value={item.videoName}>
+                    {item.videoName}
+                  </option>
+                ))}
+              </select>
+              {filters.videoName && (
+                <button className="clear-button" onClick={() => clearFilter("videoName")}>
+                  &times;
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="filter">
             <label>Filter by YouTube Channel</label>
-            <select
-              value={filters.youtubeChannel}
-              onChange={(e) =>
-                handleFilterChange("youtubeChannel", e.target.value)
-              }
-            >
-              <option value="">Select Channel</option>
-              {uniqueChannels.map((channel, index) => ( // Prevent duplicates by using uniqueChannels
-                <option key={index} value={channel}>
-                  {channel}
-                </option>
-              ))}
-            </select>
+            <div style={{ position: "relative" }}>
+              <select
+                value={filters.youtubeChannel}
+                onChange={(e) =>
+                  handleFilterChange("youtubeChannel", e.target.value)
+                }
+              >
+                <option value="">Select Channel</option>
+                {uniqueChannels.map((channel, index) => (
+                  <option key={index} value={channel}>
+                    {channel}
+                  </option>
+                ))}
+              </select>
+              {filters.youtubeChannel && (
+                <button className="clear-button" onClick={() => clearFilter("youtubeChannel")}>
+                  &times;
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="filter">
             <label>Filter by Max Hours</label>
-            <select
-              value={filters.maxHours}
-              onChange={(e) => handleFilterChange("maxHours", e.target.value)}
-            >
-              <option value="">Select Range</option>
-              {maxHourOptions.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
+            <div style={{ position: "relative" }}>
+              <select
+                value={filters.maxHours}
+                onChange={(e) => handleFilterChange("maxHours", e.target.value)}
+              >
+                <option value="">Select Range</option>
+                {maxHourOptions.map((option, index) => (
+                  <option key={index} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+              {filters.maxHours && (
+                <button className="clear-button" onClick={() => clearFilter("maxHours")}>
+                  &times;
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="filter">
@@ -261,17 +289,24 @@ export default function MultiFilters() {
 
           <div className="filter">
             <label>Filter by Difficulty</label>
-            <select
-              value={filters.difficulty}
-              onChange={(e) => handleFilterChange("difficulty", e.target.value)}
-            >
-              <option value="">Select Difficulty</option>
-              {difficulties.map((level, index) => (
-                <option key={index} value={level}>
-                  {level}
-                </option>
-              ))}
-            </select>
+            <div style={{ position: "relative" }}>
+              <select
+                value={filters.difficulty}
+                onChange={(e) => handleFilterChange("difficulty", e.target.value)}
+              >
+                <option value="">Select Difficulty</option>
+                {difficulties.map((level, index) => (
+                  <option key={index} value={level}>
+                    {level}
+                  </option>
+                ))}
+              </select>
+              {filters.difficulty && (
+                <button className="clear-button" onClick={() => clearFilter("difficulty")}>
+                  &times;
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>

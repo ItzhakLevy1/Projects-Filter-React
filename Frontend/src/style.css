@@ -81,7 +81,7 @@ p {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  width: 15em;
+  width: 20em; /* Set a fixed width for all filters */
   text-align: center;
   position: relative;
 }
@@ -97,6 +97,8 @@ p {
   padding: 8px 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  width: 100%; /* Ensure input and select fields take full width of the filter */
+  box-sizing: border-box; /* Ensure padding is included in the width */
 }
 
 .filter input {
