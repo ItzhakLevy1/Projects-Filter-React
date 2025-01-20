@@ -60,7 +60,7 @@ async function fetchFromYouTubeAPI(videoId, url) {
           data.items[0].contentDetails.duration
         ),
         techStack: matchedKeywords, // Use matched keywords as tech stack
-        difficulty: "Intermediate", // Default difficulty (adjust as needed)
+        difficulty: determineDifficulty(parseISO8601Duration(data.items[0].contentDetails.duration)), // Set difficulty based on duration
         link: url, // Original YouTube URL
       };
       console.log("Fetched from API:", videoDetails);
@@ -75,6 +75,17 @@ async function fetchFromYouTubeAPI(videoId, url) {
   } catch (error) {
     console.error("Error fetching from YouTube API:", error);
     throw error;
+  }
+}
+
+// Helper function to determine difficulty based on duration
+function determineDifficulty(durationInHours) {
+  if (durationInHours <= 5) {
+    return "Beginner";
+  } else if (durationInHours > 10) {
+    return "Advanced";
+  } else {
+    return "Intermediate";
   }
 }
 

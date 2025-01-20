@@ -274,7 +274,7 @@ export default function MultiFilters() {
                 <strong>Tech Stack:</strong> {item.techStack?.join(", ") || "N/A"}
               </p>
               <p>
-                <strong>Difficulty:</strong> {item.difficulty}
+                <strong>Difficulty:</strong> {item.difficulty || "N/A"}
               </p>
               {item.link && (
                 <p>
