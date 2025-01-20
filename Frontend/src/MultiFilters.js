@@ -117,7 +117,7 @@ export default function MultiFilters() {
       if (response.status === 201) {
         alert("Project added successfully!");
         setAddedProject(response.data); // Update state with the added project
-        setFilteredItems((prevItems) => [...prevItems, response.data]); // Add the new project to the list
+        setFilteredItems((prevItems) => [...prevItems, newItem]); // Add the new project to the list
       } else if (response.status === 409) {
         alert("Data already exists");
       } else {
