@@ -143,7 +143,6 @@ p {
 
 .item {
   /* background-color: var(--item-background-color); */
-  color: var(--item-text-color);
   padding: 16px;
   border-radius: 10px;
   box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.1);
