@@ -23,12 +23,6 @@ app.post("/api/save-data", async (req, res) => {
     console.log("Received data:", req.body);
     const { data } = req.body;
 
-    /* Check if the data already exists in the database before saving it to prevent duplications*/
-    const existingData = await DataModel.findOne({ data });
-    if (existingData) {
-      return res.status(409).json({ message: "Data already exists" });
-    }
-
     /* Save the received data in MongoDB */
     const newData = new DataModel({ data });
     const savedData = await newData.save();

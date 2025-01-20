@@ -113,21 +113,15 @@ export default function MultiFilters() {
       if (response.status === 201) {
         alert("Project added successfully!");
         setAddedProject(response.data); // Update state with the added project
-      } else if (response.status === 409) {
-        alert("Data already exists");
       } else {
         alert("Failed to add project. Please try again.");
       }
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        alert("Data already exists");
-      } else {
-        console.error(
-          "Error adding project:",
-          error.response || error.message || error
-        );
-        alert("An error occurred. Please check the console for details.");
-      }
+      console.error(
+        "Error adding project:",
+        error.response || error.message || error
+      );
+      alert("An error occurred. Please check the console for details.");
     }
   };
 
