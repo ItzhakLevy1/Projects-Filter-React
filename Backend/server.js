@@ -44,7 +44,7 @@ app.post("/api/save-data", async (req, res) => {
     }
 
     /* Check if the data already exists in the database before saving it to prevent duplications */
-    const existingData = await DataModel.findOne({ videoName, youtubeChannel });
+    const existingData = await Item.findOne({ videoName, youtubeChannel });
     if (existingData) {
       console.log("Project already exists");
       return res.status(409).json({ message: "Project already exists" });
@@ -75,7 +75,7 @@ app.post("/api/save-data", async (req, res) => {
 app.get("/api/items", async (req, res) => {
   try {
     /* Fetch all items from the database */
-    const items = await DataModel.find();
+    const items = await Item.find();
     /* Log the fetched items */
     console.log("Fetched items:", items);
     /* Respond with the fetched items */
