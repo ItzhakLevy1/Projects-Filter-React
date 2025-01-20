@@ -29,6 +29,7 @@ export default function MultiFilters() {
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const [addedProject, setAddedProject] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
+  const [doneProjects, setDoneProjects] = useState(new Set()); // Track done projects
 
   useEffect(() => {
     console.log("Filters updated:", filters);
@@ -133,6 +134,19 @@ export default function MultiFilters() {
         alert("An error occurred. Please check the console for details.");
       }
     }
+  };
+
+  /* Handle the change event for the "Done" checkbox */
+  const handleDoneChange = (videoName) => {
+    setDoneProjects((prevDoneProjects) => {
+      const newDoneProjects = new Set(prevDoneProjects);
+      if (newDoneProjects.has(videoName)) {
+        newDoneProjects.delete(videoName);
+      } else {
+        newDoneProjects.add(videoName);
+      }
+      return newDoneProjects;
+    });
   };
 
   return (
@@ -255,7 +269,10 @@ export default function MultiFilters() {
           <p>Loading projects...</p>
         ) : filteredItems.length > 0 ? (
           filteredItems.map((item, index) => (
-            <div key={`items-${index}`} className="item">
+            <div
+              key={`items-${index}`}
+              className={`item ${doneProjects.has(item.videoName) ? "done" : ""}`}
+            >
               <p>
                 <strong>Project:</strong> {item.videoName}
               </p>
@@ -284,6 +301,16 @@ export default function MultiFilters() {
                   </a>
                 </p>
               )}
+              <div>
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={doneProjects.has(item.videoName)}
+                    onChange={() => handleDoneChange(item.videoName)}
+                  />
+                  Done
+                </label>
+              </div>
             </div>
           ))
         ) : (

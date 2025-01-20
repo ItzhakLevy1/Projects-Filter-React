@@ -128,15 +128,14 @@ p {
   max-height: 100vh;
   overflow-y: auto;
 
-      display: flex
-;
-    flex-wrap: wrap;
-    /* justify-content: flex-start; */
-    gap: 20px;
-    /* padding: 20px; */
-    /* max-height: fit-content; */
-    overflow-y: auto;
-    margin-bottom: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: flex-start; */
+  gap: 20px;
+  /* padding: 20px; */
+  /* max-height: fit-content; */
+  overflow-y: auto;
+  margin-bottom: 2em;
 }
 
 .item {
@@ -147,9 +146,13 @@ p {
   box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
   flex: 0 1 calc(50% - 40px);
-  max-width: 250px;
   box-sizing: border-box;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.item.done {
+  background-color: #d3d3d3; /* Gray out the background */
+  color: #a9a9a9; /* Gray out the text */
 }
 
 .item:hover {
