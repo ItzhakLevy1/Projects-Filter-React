@@ -1,0 +1,14 @@
+Additional instructions as to how to run and operate the project locally :
+
+
+
+To edit and run each of the Frontend or the Backend - open each in its own VS Code instance and run it separately ,
+
+C:\Users\User\Documents\projects\filter-optional-projects\Frontend
+For the Frontend run : npm start 
+
+C:\Users\User\Documents\projects\filter-optional-projects\Backend
+For the Backend run : nodemon start
+
+To commit and push code for both (Frontend and Backend) use the joined level VS Code instance and run it separately from :
+C:\Users\User\Documents\projects\filter-optional-projects
