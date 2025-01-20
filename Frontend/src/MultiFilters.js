@@ -158,6 +158,9 @@ export default function MultiFilters() {
     setFilteredItems(filtered);
   };
 
+  // Get unique YouTube channels
+  const uniqueChannels = [...new Set(allItems.map((item) => item.youtubeChannel))];
+
   return (
     <div className="container">
       <div className="asd">
@@ -206,9 +209,9 @@ export default function MultiFilters() {
               }
             >
               <option value="">Select Channel</option>
-              {allItems.map((item, index) => (
-                <option key={index} value={item.youtubeChannel}>
-                  {item.youtubeChannel}
+              {uniqueChannels.map((channel, index) => ( // Prevent duplicates by using uniqueChannels
+                <option key={index} value={channel}>
+                  {channel}
                 </option>
               ))}
             </select>
