@@ -11,12 +11,13 @@
   --item-hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   --toggle-background: #333;
   --toggle-text: "Light";
+  --link-color: #00fd0d;
 }
 
 body.dark-theme {
   --background-color: #252120;
   --text-color: #d1fad7;
-  --primary-color: #ff00ea; /* Adjusted to use vibrant color */
+  --primary-color: #4e4745;
   --secondary-color: #00ff33;
   --item-background-color: #1e293b;
   --item-text-color: #fff;
@@ -164,6 +165,14 @@ p {
   margin: 10px 0;
 }
 
+/* Add styles for the title to make it stand out */
+.item p strong {
+  font-size: 1.2em;
+  color: var(--primary-color);
+  display: block; /* Make it a block element */
+  margin-bottom: 10px;
+}
+
 .items-container h1 {
   grid-column: span 3;
 }
@@ -282,4 +291,13 @@ input:checked + .slider:before {
     flex: 0 1 calc(100% - 20px);
     max-width: 100%;
   }
+}
+
+/* Change the color of the Watch Now link */
+.item a {
+  color: var(--link-color);
+}
+
+.item a:hover {
+  text-decoration: underline;
 }
