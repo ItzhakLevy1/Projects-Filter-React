@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@100;200;300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
 
 :root {
   --background-color: #f0f0f0;
@@ -20,7 +20,7 @@ body.dark-theme {
   --primary-color: #4e4745;
   --secondary-color: #00ff33;
   --item-background-color: #1e293b;
-  --item-text-color: #fff;
+  --item-text-color: #ffcc00;
   --item-hover-background-color: #333;
   --item-hover-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   --toggle-background: #ffcc00;
@@ -34,8 +34,8 @@ body.dark-theme {
 }
 
 body {
-  font-family: "IBM Plex Sans", sans-serif;
-  font-weight: 300;
+  font-family: "Roboto", sans-serif; /* Change font to Roboto */
+  font-weight: 500; /* Set default font weight */
   font-size: 14px;
   box-sizing: border-box;
   margin: 0;
