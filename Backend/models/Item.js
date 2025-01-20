@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 // Define the item schema with required fields
 const itemSchema = new mongoose.Schema({
   videoName: { type: String, required: true },
-  category: { type: String, required: true },
   youtubeChannel: { type: String, required: true },
   lengthInHours: { type: Number, required: true },
   techStack: { type: [String], required: false }, // Array of strings

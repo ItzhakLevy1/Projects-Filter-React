@@ -43,9 +43,8 @@ export default function MultiFilters() {
     const fetchItems = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/items");
-        const formattedItems = response.data.map(item => item.data); // Access the nested data field
-        setFilteredItems(formattedItems);
-        console.log("Fetched projects from backend:", formattedItems); // Log fetched projects
+        setFilteredItems(response.data);
+        console.log("Fetched projects from backend:", response.data); // Log fetched projects
       } catch (error) {
         console.error("Error fetching items from backend:", error);
       } finally {
@@ -106,11 +105,11 @@ export default function MultiFilters() {
 
       console.log("Prepared New Item:", newItem);
 
+      // Ensure the request body matches the expected structure
+      const requestBody = { data: newItem };
+
       // Test simple payload first
-      const testData = newItem;
-      const response = await axios.post("http://localhost:5000/api/save-data", {
-        data: testData,
-      });
+      const response = await axios.post("http://localhost:5000/api/save-data", requestBody);
 
       console.log("Backend Response:", response);
 
@@ -272,7 +271,7 @@ export default function MultiFilters() {
                   : "< 1 hour"}
               </p>
               <p>
-                <strong>Tech Stack:</strong> {item.techStack.join(", ")}
+                <strong>Tech Stack:</strong> {item.techStack?.join(", ") || "N/A"}
               </p>
               <p>
                 <strong>Difficulty:</strong> {item.difficulty}

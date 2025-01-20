@@ -22,17 +22,46 @@ app.post("/api/save-data", async (req, res) => {
   try {
     /* Log the received data */
     console.log("Received data:", req.body);
-    const { videoName, category, youtubeChannel, lengthInHours, techStack, difficulty, link } = req.body;
+    const {
+      videoName,
+      youtubeChannel,
+      lengthInHours,
+      techStack,
+      difficulty,
+      link,
+    } = req.body.data; // Access the fields from the nested data object
+
+    // Check if all required fields are present
+    if (!videoName) console.log("Missing videoName");
+    if (!youtubeChannel) console.log("Missing youtubeChannel");
+    if (!lengthInHours) console.log("Missing lengthInHours");
+    if (!difficulty) console.log("Missing difficulty");
+    if (!link) console.log("Missing link");
+
+    if (!videoName || !youtubeChannel || !lengthInHours || !difficulty || !link) {
+      console.log("Missing required fields");
+      return res.status(400).json({ error: "Missing required fields" });
+    }
 
     /* Check if the data already exists in the database before saving it to prevent duplications */
     const existingData = await DataModel.findOne({ videoName, youtubeChannel });
     if (existingData) {
+      console.log("Project already exists");
       return res.status(409).json({ message: "Project already exists" });
     }
 
     /* Save the received data in MongoDB */
-    const newData = new DataModel({ videoName, category, youtubeChannel, lengthInHours, techStack, difficulty, link });
+    console.log("Saving new data to the database");
+    const newData = new Item({
+      videoName,
+      youtubeChannel,
+      lengthInHours,
+      techStack,
+      difficulty,
+      link,
+    });
     const savedData = await newData.save();
+    console.log("Data saved successfully:", savedData);
 
     /* Respond with a success message and the saved data */
     res.status(201).json({ message: "Data saved successfully", savedData });

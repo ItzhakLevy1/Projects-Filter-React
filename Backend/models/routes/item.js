@@ -1,10 +1,13 @@
+const express = require("express");
+const router = express.Router(); // Import the router from express
+const Item = require("../../models/Item"); // Import the Item model
+
 // Define a POST route to add a new item
 router.post("/", async (req, res) => {
   try {
     // Destructure the request body to get item details
     const {
       videoName,
-      category,
       youtubeChannel,
       lengthInHours,
       techStack,
@@ -15,7 +18,6 @@ router.post("/", async (req, res) => {
     // Create and save the new item
     const newItem = new Item({
       videoName,
-      category,
       youtubeChannel,
       lengthInHours,
       techStack,
@@ -33,3 +35,5 @@ router.post("/", async (req, res) => {
     res.status(400).json({ error: "Error adding item" });
   }
 });
+
+module.exports = router; // Export the router
