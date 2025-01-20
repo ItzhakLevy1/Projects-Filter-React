@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { items as initialItems } from "./Items"; // Hardcoded list of items
 import ThemeToggleButton from "./components/ThemeToggleButton/ThemeToggleButton.js";
 import "./components/ThemeToggleButton/ThemeToggleButton.css";
 import "./style.css";
@@ -14,19 +13,6 @@ import {
 
 const difficulties = ["Beginner", "Intermediate", "Advanced"];
 const maxHourOptions = ["0-5 hours", "5-10 hours", "Above 10 hours"];
-const uniqueProjectvideoNames = [
-  ...new Set(initialItems.map((item) => item.videoName)),
-];
-const uniqueYouTubeChannels = [
-  ...new Set(initialItems.map((item) => item.youtubeChannel)),
-];
-const uniqueTechStack = [
-  ...new Set(
-    initialItems.flatMap((item) =>
-      item.techStack.map((tech) => tech.toLowerCase())
-    )
-  ),
-].sort();
 
 export default function MultiFilters() {
   const [filters, setFilters] = useState({
@@ -39,9 +25,10 @@ export default function MultiFilters() {
   });
 
   const [youtubeUrl, setYoutubeUrl] = useState("");
-  const [filteredItems, setFilteredItems] = useState(initialItems);
+  const [filteredItems, setFilteredItems] = useState([]);
   const [isDarkTheme, setIsDarkTheme] = useState(true);
   const [addedProject, setAddedProject] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
     console.log("Filters updated:", filters);
@@ -50,6 +37,24 @@ export default function MultiFilters() {
   useEffect(() => {
     console.log("Theme updated:", isDarkTheme ? "Dark" : "Light");
   }, [isDarkTheme]);
+
+  useEffect(() => {
+    // Fetch items from the backend
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/items");
+        const formattedItems = response.data.map(item => item.data); // Access the nested data field
+        setFilteredItems(formattedItems);
+        console.log("Fetched projects from backend:", formattedItems); // Log fetched projects
+      } catch (error) {
+        console.error("Error fetching items from backend:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching data
+      }
+    };
+
+    fetchItems();
+  }, []);
 
   const handleFilterChange = (key, value) => {
     setFilters((prevFilters) => ({
@@ -79,7 +84,6 @@ export default function MultiFilters() {
       // Extract the necessary fields
       const {
         title: videoName,
-        // description: description,
         youtubeChannel,
         videoDurationInHours,
         techStack = [],
@@ -113,6 +117,7 @@ export default function MultiFilters() {
       if (response.status === 201) {
         alert("Project added successfully!");
         setAddedProject(response.data); // Update state with the added project
+        setFilteredItems((prevItems) => [...prevItems, response.data]); // Add the new project to the list
       } else if (response.status === 409) {
         alert("Data already exists");
       } else {
@@ -120,7 +125,7 @@ export default function MultiFilters() {
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        alert("Data already exists");
+        alert("Project already exists");
       } else {
         console.error(
           "Error adding project:",
@@ -162,9 +167,9 @@ export default function MultiFilters() {
               onChange={(e) => handleFilterChange("videoName", e.target.value)}
             >
               <option value="">Select Project</option>
-              {uniqueProjectvideoNames.map((videoName, index) => (
-                <option key={index} value={videoName}>
-                  {videoName}
+              {filteredItems.map((item, index) => (
+                <option key={index} value={item.videoName}>
+                  {item.videoName}
                 </option>
               ))}
             </select>
@@ -179,9 +184,9 @@ export default function MultiFilters() {
               }
             >
               <option value="">Select Channel</option>
-              {uniqueYouTubeChannels.map((channel, index) => (
-                <option key={index} value={channel}>
-                  {channel}
+              {filteredItems.map((item, index) => (
+                <option key={index} value={item.youtubeChannel}>
+                  {item.youtubeChannel}
                 </option>
               ))}
             </select>
@@ -215,9 +220,11 @@ export default function MultiFilters() {
                 }
               />
               <datalist id="techStackSuggestions">
-                {uniqueTechStack.map((tech, index) => (
-                  <option key={index} value={tech} />
-                ))}
+                {filteredItems
+                  .flatMap((item) => item.techStack)
+                  .map((tech, index) => (
+                    <option key={index} value={tech} />
+                  ))}
               </datalist>
               {filters.techStack && (
                 <button className="clear-button" onClick={clearTechStackFilter}>
@@ -245,7 +252,9 @@ export default function MultiFilters() {
       </div>
 
       <div className="items-container">
-        {filteredItems.length > 0 ? (
+        {loading ? (
+          <p>Loading projects...</p>
+        ) : filteredItems.length > 0 ? (
           filteredItems.map((item, index) => (
             <div key={`items-${index}`} className="item">
               <p>
