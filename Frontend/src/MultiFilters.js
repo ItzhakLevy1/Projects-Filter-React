@@ -277,7 +277,7 @@ export default function MultiFilters() {
                 <strong>Project:</strong> {item.videoName}
               </p>
               <p>
-                <strong>YouTube:</strong> {item.youtubeChannel}
+                <strong>YouTube Channel:</strong> {item.youtubeChannel}
               </p>
               <p>
                 <strong>Length:</strong>{" "}
