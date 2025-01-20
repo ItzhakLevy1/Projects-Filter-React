@@ -16,7 +16,7 @@
 
 body.dark-theme {
   --background-color: #252120;
-  --text-color: #d1fad7;
+  --text-color: #7f7c7a;
   --primary-color: #4e4745;
   --secondary-color: #00ff33;
   --item-background-color: #1e293b;
@@ -303,4 +303,22 @@ input:checked + .slider:before {
 
 .item a:hover {
   text-decoration: underline;
+}
+
+.asd {
+  margin-right: 5em;
+}
+
+.add-project-button {
+  cursor: pointer;
+  border-radius: 30px;
+  padding: 8px 10px;
+  transition: color 0.3s, background-color 0.3s, box-shadow 0.3s; /* Add transition for color, background-color, and box-shadow */
+  margin-top: 1rem;
+}
+
+.add-project-button:hover {
+  color: var(--link-color);
+  background: linear-gradient(-30deg, #1f1a18 0px, #38342c 100%);
+  box-shadow: 0 0 10px var(--link-color);
 }

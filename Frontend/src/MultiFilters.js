@@ -189,7 +189,7 @@ export default function MultiFilters() {
                 if (e.key === "Enter") handleAddProject();
               }}
             />
-            <button onClick={handleAddProject}>Add Project</button>
+            <button className="add-project-button" onClick={handleAddProject}>Add Project</button>
           </div>
 
           <div className="filter">
