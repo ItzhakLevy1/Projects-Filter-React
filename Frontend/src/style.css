@@ -113,13 +113,14 @@ p {
   transform: translateY(-50%);
   background: none;
   border: none;
-  font-size: 16px;
+  font-size: 25px;
   cursor: pointer;
   color: #ccc;
 }
 
 .clear-button:hover {
   color: #ff0000;
+  font-weight: bold;
 }
 
 .items-container {
@@ -143,13 +144,14 @@ p {
 
 .item {
   /* background-color: var(--item-background-color); */
-  padding: 16px;
+  padding: 20px; /* Add padding to provide more space for the text */
   border-radius: 10px;
   box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
   flex: 0 1 calc(50% - 40px);
   box-sizing: border-box;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  overflow: hidden; /* Ensure content does not overflow out of the card */
 }
 
 .item.done {
@@ -164,11 +166,15 @@ p {
 }
 
 .item:hover p {
-  color: #00ff33b2; /* Change title and text color on hover */
-  transition: color 0.3s; /* Add transition for color */
+  color: #ffffffb2; /* Change title and text color on hover */
+  font-weight: bolder;
+  transform: scale(1.1); /* Scale the text instead of changing font size */
+  transform-origin: center; /* Scale from the center */
+  transition: all 0.3s; /* Add transition for color and transform */
 }
+
 .item:hover a {
-  color: white; /* Change link text color to white on hover */
+  color: (--link-color); /* Change link text color to white on hover */
 }
 
 .item p {
