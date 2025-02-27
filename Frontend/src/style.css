@@ -144,7 +144,7 @@ p {
 
 .item {
   /* background-color: var(--item-background-color); */
-  padding: 20px; /* Add padding to provide more space for the text */
+  padding: 20px;
   border-radius: 10px;
   box-shadow: 10px 10px 10px 5px rgba(0, 0, 0, 0.1);
   text-align: center;
@@ -155,26 +155,29 @@ p {
 }
 
 .item.done {
-  background-color: #000000; /* Gray out the background */
-  color: #4e4745; /* Gray out the text */
+  background-color: #000000;
+  color: #4e4745;
 }
 
 .item:hover {
   transform: translateY(-5px);
   box-shadow: var(--item-hover-shadow);
-  color: var(--item-hover-shadow); /* Change text color on hover */
+  color: var(--item-hover-shadow);
 }
 
 .item:hover p {
-  color: #ffffffb2; /* Change title and text color on hover */
+  color: #ffffffb2;
   font-weight: bolder;
-  transform: scale(1.1); /* Scale the text instead of changing font size */
-  transform-origin: center; /* Scale from the center */
-  transition: all 0.3s; /* Add transition for color and transform */
+  font-size: large;
+  /* transform: scale(1.1); 
+  transform-origin: center; */
+  transition: all 0.3s;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .item:hover a {
-  color: (--link-color); /* Change link text color to white on hover */
+  color: (--link-color);
 }
 
 .item p {
@@ -185,7 +188,7 @@ p {
 .item p strong {
   font-size: 1.2em;
   color: var(--primary-color);
-  display: block; /* Make it a block element */
+  display: block;
   margin-bottom: 10px;
 }
 
