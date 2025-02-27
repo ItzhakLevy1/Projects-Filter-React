@@ -173,11 +173,11 @@ export default function MultiFilters() {
   };
 
   const handleMouseEnter = () => {
-    document.querySelector('.items-container').classList.add('hover-active');
+    document.querySelector(".items-container").classList.add("hover-active");
   };
 
   const handleMouseLeave = () => {
-    document.querySelector('.items-container').classList.remove('hover-active');
+    document.querySelector(".items-container").classList.remove("hover-active");
   };
 
   const applyFilters = () => {
@@ -188,6 +188,11 @@ export default function MultiFilters() {
   // Get unique YouTube channels
   const uniqueChannels = [
     ...new Set(allItems.map((item) => item.youtubeChannel)),
+  ];
+
+  // Get unique tech stack items
+  const uniqueTechStack = [
+    ...new Set(allItems.flatMap((item) => item.techStack)),
   ];
 
   return (
@@ -314,11 +319,9 @@ export default function MultiFilters() {
                 }
               />
               <datalist id="techStackSuggestions">
-                {allItems
-                  .flatMap((item) => item.techStack)
-                  .map((tech, index) => (
-                    <option key={index} value={tech} />
-                  ))}
+                {uniqueTechStack.map((tech, index) => (
+                  <option key={index} value={tech} />
+                ))}
               </datalist>
               {filters.techStack && (
                 <button className="clear-button" onClick={clearTechStackFilter}>
