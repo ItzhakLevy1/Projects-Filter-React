@@ -174,10 +174,10 @@ p {
 
 .item:hover p {
   color: #ffffffb2;
-  font-weight: bolder;
-  font-size: large;
-  /* transform: scale(1.1); 
-  transform-origin: center; */
+  /* font-weight: bolder;
+  font-size: large; */
+  transform: scale(1.1);
+  transform-origin: center;
   transition: all 0.3s;
   padding-left: 20px;
   padding-right: 20px;

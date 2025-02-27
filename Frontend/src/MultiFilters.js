@@ -185,6 +185,20 @@ export default function MultiFilters() {
     setFilteredItems(filtered);
   };
 
+  const filterItems = (items, filters) => {
+    return items.filter((item) => {
+      const techStackKeywords = filters.techStack
+        .split(",")
+        .map((kw) => kw.trim().toLowerCase());
+      return (
+        !filters.techStack ||
+        techStackKeywords.every((kw) =>
+          item.techStack.map((ts) => ts.toLowerCase()).includes(kw)
+        )
+      );
+    });
+  };
+
   // Get unique YouTube channels
   const uniqueChannels = [
     ...new Set(allItems.map((item) => item.youtubeChannel)),
@@ -312,7 +326,7 @@ export default function MultiFilters() {
               <input
                 type="text"
                 list="techStackSuggestions"
-                placeholder="Enter keywords"
+                placeholder="Enter keywords separated by commas"
                 value={filters.techStack}
                 onChange={(e) =>
                   handleFilterChange("techStack", e.target.value)
