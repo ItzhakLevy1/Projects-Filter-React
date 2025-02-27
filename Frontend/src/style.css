@@ -142,6 +142,11 @@ p {
   margin-bottom: 2em;
 }
 
+.items-container.hover-active .item:not(:hover) {
+  opacity: 0.1; /* Dim non-hovered items */
+  transition: opacity 0.3s;
+}
+
 .item {
   /* background-color: var(--item-background-color); */
   padding: 20px;
@@ -150,7 +155,7 @@ p {
   text-align: center;
   flex: 0 1 calc(50% - 40px);
   box-sizing: border-box;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition: all 0.3s ease-in-out, box-shadow 0.2s ease-in-out;
   overflow: hidden; /* Ensure content does not overflow out of the card */
 }
 
@@ -163,6 +168,8 @@ p {
   transform: translateY(-5px);
   box-shadow: var(--item-hover-shadow);
   color: var(--item-hover-shadow);
+  /* background-color: #00000022; */
+  z-index: 1; /* Bring the hovered item above others */
 }
 
 .item:hover p {

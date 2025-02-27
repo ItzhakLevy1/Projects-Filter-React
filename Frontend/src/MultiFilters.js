@@ -172,6 +172,14 @@ export default function MultiFilters() {
     });
   };
 
+  const handleMouseEnter = () => {
+    document.querySelector('.items-container').classList.add('hover-active');
+  };
+
+  const handleMouseLeave = () => {
+    document.querySelector('.items-container').classList.remove('hover-active');
+  };
+
   const applyFilters = () => {
     const filtered = filterItems(allItems, filters);
     setFilteredItems(filtered);
@@ -359,6 +367,8 @@ export default function MultiFilters() {
               className={`item ${
                 doneProjects.has(item.videoName) ? "done" : ""
               }`}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
               <p>
                 <strong>Project:</strong> {item.videoName}
