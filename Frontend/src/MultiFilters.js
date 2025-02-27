@@ -140,10 +140,12 @@ export default function MultiFilters() {
         setAlertMessage("Data already exists");
       } else {
         setAlertMessage("Failed to add project. Please try again.");
+        setYoutubeUrl("");
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
         setAlertMessage("Project already exists");
+        setYoutubeUrl("");
       } else {
         console.error(
           "Error adding project:",
@@ -152,6 +154,7 @@ export default function MultiFilters() {
         setAlertMessage(
           "An error occurred. Please check the console for details."
         );
+        setYoutubeUrl("");
       }
     }
   };
