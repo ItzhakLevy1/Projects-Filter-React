@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ThemeToggleButton from "./components/ThemeToggleButton/ThemeToggleButton.js";
+import CustomAlert from "./components/CustomAlert.js";
 import "./components/ThemeToggleButton/ThemeToggleButton.css";
+import "./components/CustomAlert.css";
 import "./style.css";
 import axios from "axios";
 import { mapCategory } from "./components/CategoryMapping.js";
@@ -31,6 +33,7 @@ export default function MultiFilters() {
   const [addedProject, setAddedProject] = useState(null);
   const [loading, setLoading] = useState(true); // Add loading state
   const [doneProjects, setDoneProjects] = useState(new Set()); // Track done projects
+  const [alertMessage, setAlertMessage] = useState("");
 
   useEffect(() => {
     console.log("Filters updated:", filters);
@@ -84,7 +87,7 @@ export default function MultiFilters() {
     console.log("handleAddProject called");
     try {
       if (!youtubeUrl) {
-        alert("YouTube URL must not be empty");
+        setAlertMessage("YouTube URL must not be empty");
         return;
       }
 
@@ -120,29 +123,35 @@ export default function MultiFilters() {
       const requestBody = { data: newItem };
 
       // Test simple payload first
-      const response = await axios.post("http://localhost:5000/api/save-data", requestBody);
+      const response = await axios.post(
+        "http://localhost:5000/api/save-data",
+        requestBody
+      );
 
       console.log("Backend Response:", response);
 
       if (response.status === 201) {
-        alert("Project added successfully!");
+        setAlertMessage("Project added successfully!");
         setAddedProject(response.data); // Update state with the added project
         setAllItems((prevItems) => [...prevItems, newItem]); // Add the new project to the list
         applyFilters(); // Apply filters to include the new project
+        setYoutubeUrl(""); // Clear the YouTube URL field
       } else if (response.status === 409) {
-        alert("Data already exists");
+        setAlertMessage("Data already exists");
       } else {
-        alert("Failed to add project. Please try again.");
+        setAlertMessage("Failed to add project. Please try again.");
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        alert("Project already exists");
+        setAlertMessage("Project already exists");
       } else {
         console.error(
           "Error adding project:",
           error.response || error.message || error
         );
-        alert("An error occurred. Please check the console for details.");
+        setAlertMessage(
+          "An error occurred. Please check the console for details."
+        );
       }
     }
   };
@@ -166,10 +175,18 @@ export default function MultiFilters() {
   };
 
   // Get unique YouTube channels
-  const uniqueChannels = [...new Set(allItems.map((item) => item.youtubeChannel))];
+  const uniqueChannels = [
+    ...new Set(allItems.map((item) => item.youtubeChannel)),
+  ];
 
   return (
     <div className="container">
+      {alertMessage && (
+        <CustomAlert
+          message={alertMessage}
+          onClose={() => setAlertMessage("")}
+        />
+      )}
       <div className="asd">
         <div className="header-container">
           {/* <h1 className="header-title">Projects Filter</h1> */}
@@ -189,7 +206,9 @@ export default function MultiFilters() {
                 if (e.key === "Enter") handleAddProject();
               }}
             />
-            <button className="add-project-button" onClick={handleAddProject}>Add Project</button>
+            <button className="add-project-button" onClick={handleAddProject}>
+              Add Project
+            </button>
           </div>
 
           <div className="filter">
@@ -197,7 +216,9 @@ export default function MultiFilters() {
             <div style={{ position: "relative" }}>
               <select
                 value={filters.videoName}
-                onChange={(e) => handleFilterChange("videoName", e.target.value)}
+                onChange={(e) =>
+                  handleFilterChange("videoName", e.target.value)
+                }
               >
                 <option value="">Select Project</option>
                 {allItems.map((item, index) => (
@@ -207,7 +228,10 @@ export default function MultiFilters() {
                 ))}
               </select>
               {filters.videoName && (
-                <button className="clear-button" onClick={() => clearFilter("videoName")}>
+                <button
+                  className="clear-button"
+                  onClick={() => clearFilter("videoName")}
+                >
                   &times;
                 </button>
               )}
@@ -231,7 +255,10 @@ export default function MultiFilters() {
                 ))}
               </select>
               {filters.youtubeChannel && (
-                <button className="clear-button" onClick={() => clearFilter("youtubeChannel")}>
+                <button
+                  className="clear-button"
+                  onClick={() => clearFilter("youtubeChannel")}
+                >
                   &times;
                 </button>
               )}
@@ -253,7 +280,10 @@ export default function MultiFilters() {
                 ))}
               </select>
               {filters.maxHours && (
-                <button className="clear-button" onClick={() => clearFilter("maxHours")}>
+                <button
+                  className="clear-button"
+                  onClick={() => clearFilter("maxHours")}
+                >
                   &times;
                 </button>
               )}
@@ -292,7 +322,9 @@ export default function MultiFilters() {
             <div style={{ position: "relative" }}>
               <select
                 value={filters.difficulty}
-                onChange={(e) => handleFilterChange("difficulty", e.target.value)}
+                onChange={(e) =>
+                  handleFilterChange("difficulty", e.target.value)
+                }
               >
                 <option value="">Select Difficulty</option>
                 {difficulties.map((level, index) => (
@@ -302,7 +334,10 @@ export default function MultiFilters() {
                 ))}
               </select>
               {filters.difficulty && (
-                <button className="clear-button" onClick={() => clearFilter("difficulty")}>
+                <button
+                  className="clear-button"
+                  onClick={() => clearFilter("difficulty")}
+                >
                   &times;
                 </button>
               )}
@@ -318,7 +353,9 @@ export default function MultiFilters() {
           filteredItems.map((item, index) => (
             <div
               key={`items-${index}`}
-              className={`item ${doneProjects.has(item.videoName) ? "done" : ""}`}
+              className={`item ${
+                doneProjects.has(item.videoName) ? "done" : ""
+              }`}
             >
               <p>
                 <strong>Project:</strong> {item.videoName}
@@ -335,7 +372,8 @@ export default function MultiFilters() {
                   : "< 1 hour"}
               </p>
               <p>
-                <strong>Tech Stack:</strong> {item.techStack?.join(", ") || "N/A"}
+                <strong>Tech Stack:</strong>{" "}
+                {item.techStack?.join(", ") || "N/A"}
               </p>
               <p>
                 <strong>Difficulty:</strong> {item.difficulty || "N/A"}
