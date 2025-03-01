@@ -128,10 +128,9 @@ p {
   flex-wrap: wrap;
   justify-content: flex-start; /* Align items to the left */
   gap: 20px;
-  padding: 20px;
+  padding: 100px;
   max-height: 100vh;
   overflow-y: auto;
-
   display: flex;
   flex-wrap: wrap;
   /* justify-content: flex-start; */
@@ -176,11 +175,11 @@ p {
   color: #ffffffb2;
   /* font-weight: bolder;
   font-size: large; */
-  transform: scale(1.1);
+  transform: scale(1.2);
   transform-origin: center;
   transition: all 0.3s;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 .item:hover a {
