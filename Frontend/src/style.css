@@ -345,3 +345,4 @@ input:checked + .slider:before {
   background: linear-gradient(-30deg, #1f1a18 0px, #38342c 100%);
   box-shadow: 0 0 10px var(--link-color);
 }
+/*  */
