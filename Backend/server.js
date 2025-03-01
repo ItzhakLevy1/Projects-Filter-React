@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -16,6 +17,9 @@ mongoose
 
 app.use(cors()); // Enable CORS for development
 app.use(express.json()); // Parse JSON bodies
+
+// Serve static files from the frontend build directory
+app.use(express.static(path.join(__dirname, "../Frontend/build")));
 
 /* Define a POST route to save data (new projects) */
 app.post("/api/save-data", async (req, res) => {
@@ -84,6 +88,11 @@ app.get("/api/items", async (req, res) => {
     console.error("Error fetching items:", error);
     res.status(500).json({ error: "Failed to fetch items" });
   }
+});
+
+// Serve the frontend application for any other routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../Frontend/build", "index.html"));
 });
 
 /* Start the server */
