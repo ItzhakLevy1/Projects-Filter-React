@@ -387,44 +387,50 @@ export default function MultiFilters() {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <p>
-                <strong>Project:</strong> {item.videoName}
-              </p>
-              <p>
-                <strong>YouTube Channel:</strong> {item.youtubeChannel}
-              </p>
-              <p>
-                <strong>Length:</strong>{" "}
-                {item.lengthInHours > 0
-                  ? `${Math.floor(item.lengthInHours)} hours ${Math.round(
-                      (item.lengthInHours % 1) * 60
-                    )} minutes`
-                  : "< 1 hour"}
-              </p>
-              <p>
-                <strong>Tech Stack:</strong>{" "}
-                {item.techStack?.join(", ") || "N/A"}
-              </p>
-              <p>
-                <strong>Difficulty:</strong> {item.difficulty || "N/A"}
-              </p>
-              {item.link && (
+              <div className="content">
                 <p>
-                  <strong>Link:</strong>{" "}
-                  <a href={item.link} target="_blank" rel="noopener noreferrer">
-                    Watch Now
-                  </a>
+                  <strong>Project:</strong> {item.videoName}
                 </p>
-              )}
-              <div>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={doneProjects.has(item.videoName)}
-                    onChange={() => handleDoneChange(item.videoName)}
-                  />
-                  Done
-                </label>
+                <p>
+                  <strong>YouTube Channel:</strong> {item.youtubeChannel}
+                </p>
+                <p>
+                  <strong>Length:</strong>{" "}
+                  {item.lengthInHours > 0
+                    ? `${Math.floor(item.lengthInHours)} hours ${Math.round(
+                        (item.lengthInHours % 1) * 60
+                      )} minutes`
+                    : "< 1 hour"}
+                </p>
+                <p>
+                  <strong>Tech Stack:</strong>{" "}
+                  {item.techStack?.join(", ") || "N/A"}
+                </p>
+                <p>
+                  <strong>Difficulty:</strong> {item.difficulty || "N/A"}
+                </p>
+                {item.link && (
+                  <p>
+                    <strong>Link:</strong>{" "}
+                    <a
+                      href={item.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Watch Now
+                    </a>
+                  </p>
+                )}
+                <div>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={doneProjects.has(item.videoName)}
+                      onChange={() => handleDoneChange(item.videoName)}
+                    />
+                    Done
+                  </label>
+                </div>
               </div>
             </div>
           ))

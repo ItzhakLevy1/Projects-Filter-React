@@ -151,6 +151,7 @@ p {
   box-sizing: border-box;
   transition: all 0.3s ease-in-out, box-shadow 0.2s ease-in-out;
   overflow: hidden; /* Ensure content does not overflow out of the card */
+  position: relative; /* Ensure the item stays in place */
 }
 
 .item.done {
@@ -164,25 +165,32 @@ p {
   color: var(--item-hover-shadow);
   /* background-color: #00000022; */
   z-index: 1; /* Bring the hovered item above others */
+  position: relative; /* Ensure the hovered item stays in place */
 }
 
 .item:hover p {
   color: #ffffffb2;
-  /* font-weight: bolder;
-  font-size: large; */
-  transform: scale(1.2);
-  transform-origin: center;
+  font-weight: bolder;
   transition: all 0.3s;
   padding-left: 50px;
   padding-right: 50px;
 }
 
-.item:hover a {
-  color: (--link-color);
+.item:hover .content {
+  transform: scale(1.1); /* Scale the content slightly */
+  transform-origin: center; /* Scale from the center */
+  transition: transform 0.3s; /* Add transition for smooth scaling */
 }
 
 .item p {
   margin: 10px 0;
+}
+
+.content {
+  transition: transform 0.3s; /* Add transition for smooth scaling */
+  overflow: hidden; /* Ensure content does not overflow out of the card */
+  max-height: 100%; /* Limit the height of the content */
+  max-width: 100%; /* Limit the width of the content */
 }
 
 /* Add styles for the title to make it stand out */
